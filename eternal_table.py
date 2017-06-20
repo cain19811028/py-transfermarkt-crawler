@@ -11,7 +11,8 @@ LASTYEAR = int(datetime.datetime.today().strftime('%Y')) - 1
 LEAGUE = {}
 LEAGUE["England"] = {"id":"ENG", "league":"premier-league", "level":"GB1", "startYear":"1992"}
 LEAGUE["Spain"]   = {"id":"SPA", "league":"laliga", "level":"ES1", "startYear":"1928"}
-LEAGUE["Germany"]   = {"id":"GER", "league":"1-bundesliga", "level":"L1", "startYear":"1963"}
+LEAGUE["Germany"] = {"id":"GER", "league":"1-bundesliga", "level":"L1", "startYear":"1963"}
+LEAGUE["Italy"]   = {"id":"ITA", "league":"serie-a", "level":"IT1", "startYear":"1929"}
 
 def getEternalTable(cursor, data):
     url  = DOMAIN + data["league"] + "/ewigeTabelle/wettbewerb/"
@@ -37,23 +38,20 @@ def getEternalTable(cursor, data):
         loss = td[9].text_content().replace(".", "")
         point = td[13].text_content().replace(".", "")
 
-        # 先檢查球會資料
+        # build club data
         cursor.execute('select id from club where id = %s', id)
         if(cursor.rowcount == 0):
-            # 查無資料則新增一筆
             sql = 'insert into club (id, name, nation) values(%s, %s, %s)'
             param = (id, name, data["id"])
             cursor.execute(sql, param)
             print(id + " : " + name + " : " + data["id"])
 
-        # 再更新歷史記錄
+        # build eternal table
         cursor.execute('select id from eternal_table where id = %s', id)
         if(cursor.rowcount == 0):
-            # 查無資料則新增一筆
             sql = 'insert into eternal_table values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
             param = (id, level, league, years, first, match, win, draw, loss, point)
         else:
-            # 更新履歷資料
             sql = 'update eternal_table set level = %s, league = %s, years = %s, first = %s, `match` = %s, win = %s, draw = %s, loss = %s, point = %s where id = %s'
             param = (level, league, years, first, match, win, draw, loss, point, id)
         cursor.execute(sql, param)
