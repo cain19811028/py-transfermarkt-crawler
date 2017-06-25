@@ -3,6 +3,7 @@ import json
 import pymysql
 import re
 import requests
+from common.dao import Dao
 from lxml import html
 
 DOMAIN = "https://www.transfermarkt.co.uk/"
@@ -15,7 +16,7 @@ LEAGUE["Germany"] = {"id":"GER", "leagueName":"1-bundesliga", "leagueSimplify":"
 LEAGUE["Italy"]   = {"id":"ITA", "leagueName":"serie-a", "leagueSimplify":"IT1", "startYear":"1929"}
 LEAGUE["France"]  = {"id":"FRA", "leagueName":"ligue-1", "leagueSimplify":"FR1", "startYear":"1980"}
 
-def getEternalTable(cursor, data):
+def getEternalTable(data):
     url  = DOMAIN + data["leagueName"] + "/ewigeTabelle/wettbewerb/"
     url += data["leagueSimplify"] + "/saison_id_von/"
     url += data["startYear"] + "/saison_id_bis/" + str(LASTYEAR) + "/tabllenart/alle/plus/1"
@@ -40,39 +41,27 @@ def getEternalTable(cursor, data):
         point = td[13].text_content().replace(".", "")
 
         # build club data
-        cursor.execute('select id from club where id = %s', id)
-        if(cursor.rowcount == 0):
-            sql = 'insert into club (id, name, nation) values(%s, %s, %s)'
+        count = Dao.getClubCount(id)
+        if(count == 0):
             param = (id, name, data["id"])
-            cursor.execute(sql, param)
+            Dao.insertClub(param)
             print(id + " : " + name + " : " + data["id"])
 
         # build eternal table
-        cursor.execute('select id from eternal_table where id = %s', id)
-        if(cursor.rowcount == 0):
-            sql = 'insert into eternal_table values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
+        count = Dao.getEternalTable(id)
+        if(count == 0):
             param = (id, league, level, years, first, match, win, draw, loss, point)
+            Dao.insertEternalTable(param)
         else:
-            sql = 'update eternal_table set league = %s, level = %s, years = %s, first = %s, `match` = %s, win = %s, draw = %s, loss = %s, point = %s where id = %s'
             param = (league, level, years, first, match, win, draw, loss, point, id)
-        cursor.execute(sql, param)
+            Dao.updateEternalTable(param)
+
         print(id + " : " + name + " : " + league + " : " + level + " : " + years + " : " + first + " : " + match + " : " + win + " : " + draw + " : " + loss + " : " + point)
 
 """
 Main
 """
-config = {
-    'host': '127.0.0.1',
-    'port': 3306,
-    'user': 'root',
-    'passwd': '',
-    'charset':'utf8mb4',
-    'db':'transfermarkt',
-    'autocommit': True,
-    'cursorclass':pymysql.cursors.DictCursor
-}
-conn = pymysql.connect(**config)
-cursor = conn.cursor()
+Dao.init()
 
 for country in LEAGUE:
-    getEternalTable(cursor, LEAGUE[country])
+    getEternalTable(LEAGUE[country])
