@@ -9,14 +9,15 @@ DOMAIN = "https://www.transfermarkt.co.uk/"
 HEADERS = {'User-Agent': 'Mozilla/5.0'}
 LASTYEAR = int(datetime.datetime.today().strftime('%Y')) - 1
 LEAGUE = {}
-LEAGUE["England"] = {"id":"ENG", "league":"premier-league", "level":"GB1", "startYear":"1992"}
-LEAGUE["Spain"]   = {"id":"SPA", "league":"laliga", "level":"ES1", "startYear":"1928"}
-LEAGUE["Germany"] = {"id":"GER", "league":"1-bundesliga", "level":"L1", "startYear":"1963"}
-LEAGUE["Italy"]   = {"id":"ITA", "league":"serie-a", "level":"IT1", "startYear":"1929"}
+LEAGUE["England"] = {"id":"ENG", "leagueName":"premier-league", "leagueSimplify":"GB1", "startYear":"1992"}
+LEAGUE["Spain"]   = {"id":"SPA", "leagueName":"laliga", "leagueSimplify":"ES1", "startYear":"1928"}
+LEAGUE["Germany"] = {"id":"GER", "leagueName":"1-bundesliga", "leagueSimplify":"L1", "startYear":"1963"}
+LEAGUE["Italy"]   = {"id":"ITA", "leagueName":"serie-a", "leagueSimplify":"IT1", "startYear":"1929"}
+LEAGUE["France"]  = {"id":"FRA", "leagueName":"ligue-1", "leagueSimplify":"FR1", "startYear":"1980"}
 
 def getEternalTable(cursor, data):
-    url  = DOMAIN + data["league"] + "/ewigeTabelle/wettbewerb/"
-    url += data["level"] + "/saison_id_von/"
+    url  = DOMAIN + data["leagueName"] + "/ewigeTabelle/wettbewerb/"
+    url += data["leagueSimplify"] + "/saison_id_von/"
     url += data["startYear"] + "/saison_id_bis/" + str(LASTYEAR) + "/tabllenart/alle/plus/1"
     print(url)
 
@@ -27,9 +28,9 @@ def getEternalTable(cursor, data):
         td = row.xpath('td')
         id = str(row.xpath('td/a/@id')[0])
         name = td[2].text_content()
-        level = data["level"]
+        league = data["leagueSimplify"]
         tempLeague = td[3].text_content().replace(".Liga", "")
-        league = tempLeague if re.match(r"(\d+)", tempLeague) else "99"
+        level = tempLeague if re.match(r"(\d+)", tempLeague) else "99"
         years = td[4].text_content().replace(".", "")
         first = td[5].text_content().replace(".", "")
         match = td[6].text_content().replace(".", "")
@@ -50,12 +51,12 @@ def getEternalTable(cursor, data):
         cursor.execute('select id from eternal_table where id = %s', id)
         if(cursor.rowcount == 0):
             sql = 'insert into eternal_table values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
-            param = (id, level, league, years, first, match, win, draw, loss, point)
+            param = (id, league, level, years, first, match, win, draw, loss, point)
         else:
-            sql = 'update eternal_table set level = %s, league = %s, years = %s, first = %s, `match` = %s, win = %s, draw = %s, loss = %s, point = %s where id = %s'
-            param = (level, league, years, first, match, win, draw, loss, point, id)
+            sql = 'update eternal_table set league = %s, level = %s, years = %s, first = %s, `match` = %s, win = %s, draw = %s, loss = %s, point = %s where id = %s'
+            param = (league, level, years, first, match, win, draw, loss, point, id)
         cursor.execute(sql, param)
-        print(id + " : " + name + " : " + level + " : " + league + " : " + years + " : " + first + " : " + match + " : " + win + " : " + draw + " : " + loss + " : " + point)
+        print(id + " : " + name + " : " + league + " : " + level + " : " + years + " : " + first + " : " + match + " : " + win + " : " + draw + " : " + loss + " : " + point)
 
 """
 Main
