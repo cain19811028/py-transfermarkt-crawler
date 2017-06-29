@@ -35,6 +35,19 @@ class Dao(object):
         sql += ')'
         Dao.cursor.execute(sql)
 
+    @staticmethod
+    def createClubTable():
+        sql  = 'create table if not exists club ('
+        sql += 'id varchar(5) not null,'
+        sql += 'name varchar(40),'
+        sql += 'nation varchar(3),'
+        sql += 'founded varchar(4),'
+        sql += 'ground varchar(50),'
+        sql += 'capacity smallint,'
+        sql += 'primary key (id)'
+        sql += ')'
+        Dao.cursor.execute(sql)
+
     def getClubCount(id):
         Dao.cursor.execute('select id from club where id = %s', id)
         return Dao.cursor.rowcount
