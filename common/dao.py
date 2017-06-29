@@ -18,6 +18,23 @@ class Dao(object):
         conn = pymysql.connect(**Dao.config)
         Dao.cursor = conn.cursor()
 
+    @staticmethod
+    def createEternalTable():
+        sql  = 'create table if not exists eternal_table ('
+        sql += 'id varchar(5) not null,'
+        sql += 'league varchar(4) not null,'
+        sql += 'level tinyint,'
+        sql += 'years smallint,'
+        sql += 'first smallint,'
+        sql += '`match` smallint,'
+        sql += 'win smallint,'
+        sql += 'draw smallint,'
+        sql += 'loss smallint,'
+        sql += 'point smallint,'
+        sql += 'primary key (id, league)'
+        sql += ')'
+        Dao.cursor.execute(sql)
+
     def getClubCount(id):
         Dao.cursor.execute('select id from club where id = %s', id)
         return Dao.cursor.rowcount

@@ -10,11 +10,12 @@ DOMAIN = "https://www.transfermarkt.co.uk/"
 HEADERS = {'User-Agent': 'Mozilla/5.0'}
 LASTYEAR = int(datetime.datetime.today().strftime('%Y')) - 1
 LEAGUE = {}
-LEAGUE["England"] = {"id":"ENG", "leagueName":"premier-league", "leagueSimplify":"GB1", "startYear":"1992"}
-LEAGUE["Spain"]   = {"id":"SPA", "leagueName":"laliga", "leagueSimplify":"ES1", "startYear":"1928"}
-LEAGUE["Germany"] = {"id":"GER", "leagueName":"1-bundesliga", "leagueSimplify":"L1", "startYear":"1963"}
-LEAGUE["Italy"]   = {"id":"ITA", "leagueName":"serie-a", "leagueSimplify":"IT1", "startYear":"1929"}
-LEAGUE["France"]  = {"id":"FRA", "leagueName":"ligue-1", "leagueSimplify":"FR1", "startYear":"1980"}
+# LEAGUE["England"]  = {"id":"ENG", "leagueName":"premier-league", "leagueSimplify":"GB1", "startYear":"1992"}
+# LEAGUE["Spain"]    = {"id":"SPA", "leagueName":"laliga", "leagueSimplify":"ES1", "startYear":"1928"}
+# LEAGUE["Germany"]  = {"id":"GER", "leagueName":"1-bundesliga", "leagueSimplify":"L1", "startYear":"1963"}
+# LEAGUE["Italy"]    = {"id":"ITA", "leagueName":"serie-a", "leagueSimplify":"IT1", "startYear":"1929"}
+# LEAGUE["France"]   = {"id":"FRA", "leagueName":"ligue-1", "leagueSimplify":"FR1", "startYear":"1980"}
+# LEAGUE["Portugal"] = {"id":"PRT", "leagueName":"liga-nos", "leagueSimplify":"PO1", "startYear":"1990"}
 
 def getEternalTable(data):
     url  = DOMAIN + data["leagueName"] + "/ewigeTabelle/wettbewerb/"
@@ -62,6 +63,7 @@ def getEternalTable(data):
 Main
 """
 Dao.init()
+Dao.createEternalTable()
 
 for country in LEAGUE:
     getEternalTable(LEAGUE[country])
