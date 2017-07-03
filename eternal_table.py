@@ -40,6 +40,7 @@ def getEternalTable(data):
         win = td[7].text_content().replace(".", "")
         draw = td[8].text_content().replace(".", "")
         loss = td[9].text_content().replace(".", "")
+        goal = td[10].text_content().split(":")[0].replace(".", "")
         point = td[13].text_content().replace(".", "")
 
         # build club data
@@ -52,13 +53,13 @@ def getEternalTable(data):
         # build eternal table
         count = Dao.getEternalTable(id)
         if(count == 0):
-            param = (id, league, level, years, first, match, win, draw, loss, point)
+            param = (id, league, level, years, first, match, win, draw, loss, goal, point)
             Dao.insertEternalTable(param)
         else:
-            param = (league, level, years, first, match, win, draw, loss, point, id)
+            param = (league, level, years, first, match, win, draw, loss, goal, point, id)
             Dao.updateEternalTable(param)
 
-        print(id + " : " + name + " : " + league + " : " + level + " : " + years + " : " + first + " : " + match + " : " + win + " : " + draw + " : " + loss + " : " + point)
+        print(id + " : " + name + " : " + league + " : " + level + " : " + years + " : " + first + " : " + match + " : " + win + " : " + draw + " : " + loss + " : " + goal + " : " + point)
 
 """
 Main

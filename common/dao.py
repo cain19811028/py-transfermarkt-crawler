@@ -30,6 +30,7 @@ class Dao(object):
         sql += 'win smallint,'
         sql += 'draw smallint,'
         sql += 'loss smallint,'
+        sql += 'goal smallint,'
         sql += 'point smallint,'
         sql += 'primary key (id, league)'
         sql += ')'
@@ -61,9 +62,9 @@ class Dao(object):
         Dao.cursor.execute(sql, param)
 
     def insertEternalTable(param):
-        sql = 'insert into eternal_table values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
+        sql = 'insert into eternal_table values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
         Dao.cursor.execute(sql, param)
 
     def updateEternalTable(param):
-        sql = 'update eternal_table set league = %s, level = %s, years = %s, first = %s, `match` = %s, win = %s, draw = %s, loss = %s, point = %s where id = %s'
+        sql = 'update eternal_table set league = %s, level = %s, years = %s, first = %s, `match` = %s, win = %s, draw = %s, loss = %s, goal = %s, point = %s where id = %s'
         Dao.cursor.execute(sql, param)
