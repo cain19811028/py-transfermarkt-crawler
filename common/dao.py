@@ -53,9 +53,13 @@ class Dao(object):
         Dao.cursor.execute('select id from club where id = %s', id)
         return Dao.cursor.rowcount
 
-    def getEternalTable(id):
+    def getEternalTableCount(id):
         Dao.cursor.execute('select id from eternal_table where id = %s', id)
         return Dao.cursor.rowcount
+
+    def getNotCompleteClub():
+        Dao.cursor.execute('select id from club where founded is null or ground is null or capacity is null')
+        return Dao.cursor.fetchall()
 
     def insertClub(param):
         sql = 'insert into club (id, name, nation) values(%s, %s, %s)'
@@ -67,4 +71,8 @@ class Dao(object):
 
     def updateEternalTable(param):
         sql = 'update eternal_table set league = %s, level = %s, years = %s, first = %s, `match` = %s, win = %s, draw = %s, loss = %s, goal = %s, point = %s where id = %s'
+        Dao.cursor.execute(sql, param)
+
+    def updateClubExtraData(param):
+        sql = 'update club set founded = %s, ground = %s, capacity = %s where id = %s'
         Dao.cursor.execute(sql, param)

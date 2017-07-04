@@ -51,7 +51,7 @@ def getEternalTable(data):
             print(id + " : " + name + " : " + data["id"])
 
         # build eternal table
-        count = Dao.getEternalTable(id)
+        count = Dao.getEternalTableCount(id)
         if(count == 0):
             param = (id, league, level, years, first, match, win, draw, loss, goal, point)
             Dao.insertEternalTable(param)
@@ -60,6 +60,36 @@ def getEternalTable(data):
             Dao.updateEternalTable(param)
 
         print(id + " : " + name + " : " + league + " : " + level + " : " + years + " : " + first + " : " + match + " : " + win + " : " + draw + " : " + loss + " : " + goal + " : " + point)
+
+def updateClubExtraData():
+    result = Dao.getNotCompleteClub()
+    for club in result:
+        foundation = ""
+        stadium = ""
+        seat = 0
+
+        url  = DOMAIN + "club/datenfakten/verein/" + club["id"]
+        response = requests.get(url, headers = HEADERS)
+        content = html.fromstring(response.text)
+
+        # get stadium and seat data
+        span = content.xpath('//div[@class="dataDaten"][2]/p[2]/span[2]')
+        if len(span[0].xpath('a')) > 0:
+            stadium = span[0].xpath('a')[0].text_content()
+            seat = span[0].xpath('span')[0].text_content().replace(" Seats", "").replace(".", "")
+
+        # get foundation data
+        table = content.xpath('//table[@class="profilheader"]/tr')
+        for row in table:
+            th = row.xpath('th')[0].text_content()
+            td = row.xpath('td')[0].text_content()
+            if th == "Foundation:":
+                if td.find(",") > -1:
+                    foundation = td.split(',')[1].strip()
+
+        param = (foundation, stadium, seat, club["id"])
+        Dao.updateClubExtraData(param)
+        print(club["id"] + ", " + foundation + ", " + stadium + ", " + str(seat))
 
 """
 Main
@@ -70,3 +100,5 @@ Dao.createClubTable()
 
 for country in LEAGUE:
     getEternalTable(LEAGUE[country])
+
+updateClubExtraData()
