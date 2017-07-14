@@ -8,15 +8,18 @@ from lxml import html
 
 DOMAIN = "https://www.transfermarkt.co.uk/"
 HEADERS = {'User-Agent': 'Mozilla/5.0'}
-LASTYEAR = int(datetime.datetime.today().strftime('%Y')) - 1
+LASTYEAR = int(datetime.datetime.today().strftime('%Y'))
 LEAGUE = {}
-LEAGUE["England"]  = {"id":"ENG", "leagueName":"premier-league", "leagueSimplify":"GB1", "startYear":"1992"}
-LEAGUE["Spain"]    = {"id":"SPA", "leagueName":"laliga", "leagueSimplify":"ES1", "startYear":"1928"}
-LEAGUE["Germany"]  = {"id":"GER", "leagueName":"1-bundesliga", "leagueSimplify":"L1", "startYear":"1963"}
-LEAGUE["Italy"]    = {"id":"ITA", "leagueName":"serie-a", "leagueSimplify":"IT1", "startYear":"1929"}
-LEAGUE["France"]   = {"id":"FRA", "leagueName":"ligue-1", "leagueSimplify":"FR1", "startYear":"1980"}
-LEAGUE["Portugal"] = {"id":"PRT", "leagueName":"liga-nos", "leagueSimplify":"PO1", "startYear":"1990"}
-LEAGUE["Turkey"]   = {"id":"TUR", "leagueName":"super-lig", "leagueSimplify":"TR1", "startYear":"1990"}
+LEAGUE["England"]     = {"id":"ENG", "leagueName":"premier-league", "leagueSimplify":"GB1", "startYear":"1992"}
+LEAGUE["Spain"]       = {"id":"SPA", "leagueName":"laliga", "leagueSimplify":"ES1", "startYear":"1928"}
+LEAGUE["Germany"]     = {"id":"GER", "leagueName":"1-bundesliga", "leagueSimplify":"L1", "startYear":"1963"}
+LEAGUE["Italy"]       = {"id":"ITA", "leagueName":"serie-a", "leagueSimplify":"IT1", "startYear":"1929"}
+LEAGUE["France"]      = {"id":"FRA", "leagueName":"ligue-1", "leagueSimplify":"FR1", "startYear":"1980"}
+LEAGUE["Portugal"]    = {"id":"PRT", "leagueName":"liga-nos", "leagueSimplify":"PO1", "startYear":"1990"}
+LEAGUE["Turkey"]      = {"id":"TUR", "leagueName":"super-lig", "leagueSimplify":"TR1", "startYear":"1990"}
+LEAGUE["Russia"]      = {"id":"RUS", "leagueName":"premier-liga", "leagueSimplify":"RU1", "startYear":"1992"}
+LEAGUE["Netherlands"] = {"id":"NLD", "leagueName":"eredivisie", "leagueSimplify":"NL1", "startYear":"1954"}
+LEAGUE["Belgium"]     = {"id":"BEL", "leagueName":"jupiler-pro-league", "leagueSimplify":"BE1", "startYear":"2000"}
 
 def getEternalTable(data):
     url  = DOMAIN + data["leagueName"] + "/ewigeTabelle/wettbewerb/"
