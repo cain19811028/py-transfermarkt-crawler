@@ -8,8 +8,10 @@ from lxml import html
 
 DOMAIN = "https://www.transfermarkt.co.uk/"
 HEADERS = {'User-Agent': 'Mozilla/5.0'}
-LASTYEAR = int(datetime.datetime.today().strftime('%Y'))
+LASTYEAR = int(datetime.datetime.today().strftime('%Y')) - 1
 LEAGUE = {}
+
+# European
 LEAGUE["England"]     = {"id":"ENG", "leagueName":"premier-league", "leagueSimplify":"GB1", "startYear":"1992"}
 LEAGUE["Spain"]       = {"id":"SPA", "leagueName":"laliga", "leagueSimplify":"ES1", "startYear":"1928"}
 LEAGUE["Germany"]     = {"id":"GER", "leagueName":"1-bundesliga", "leagueSimplify":"L1", "startYear":"1963"}
@@ -20,6 +22,17 @@ LEAGUE["Turkey"]      = {"id":"TUR", "leagueName":"super-lig", "leagueSimplify":
 LEAGUE["Russia"]      = {"id":"RUS", "leagueName":"premier-liga", "leagueSimplify":"RU1", "startYear":"1992"}
 LEAGUE["Netherlands"] = {"id":"NLD", "leagueName":"eredivisie", "leagueSimplify":"NL1", "startYear":"1954"}
 LEAGUE["Belgium"]     = {"id":"BEL", "leagueName":"jupiler-pro-league", "leagueSimplify":"BE1", "startYear":"2000"}
+LEAGUE["Greece"]      = {"id":"GRC", "leagueName":"super-league", "leagueSimplify":"GR1", "startYear":"1988"}
+
+# America
+LEAGUE["Brazil"]      = {"id":"BRA", "leagueName":"campeonato-brasileiro-serie-a", "leagueSimplify":"BRA1", "startYear":"2005"}
+LEAGUE["Argentina"]   = {"id":"ARG", "leagueName":"primera-division", "leagueSimplify":"AR1N", "startYear":"2014"}
+LEAGUE["Mexico"]      = {"id":"MEX", "leagueName":"liga-mx-clausura", "leagueSimplify":"MEX1", "startYear":"2006"}
+LEAGUE["Mexico"]      = {"id":"MEX", "leagueName":"liga-mx-apertura", "leagueSimplify":"MEXA", "startYear":"2006"}
+
+# Asia
+LEAGUE["China"]       = {"id":"CHN", "leagueName":"chinese-super-league", "leagueSimplify":"CSL", "startYear":"1993"}
+LEAGUE["Japan"]       = {"id":"JPN", "leagueName":"j1-league", "leagueSimplify":"JAP1", "startYear":"2004"}
 
 def getEternalTable(data):
     url  = DOMAIN + data["leagueName"] + "/ewigeTabelle/wettbewerb/"
@@ -54,7 +67,7 @@ def getEternalTable(data):
             print(id + " : " + name + " : " + data["id"])
 
         # build eternal table
-        count = Dao.getEternalTableCount(id)
+        count = Dao.getEternalTableCount(id, league)
         if(count == 0):
             param = (id, league, level, years, first, match, win, draw, loss, goal, point)
             Dao.insertEternalTable(param)

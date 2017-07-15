@@ -53,8 +53,8 @@ class Dao(object):
         Dao.cursor.execute('select id from club where id = %s', id)
         return Dao.cursor.rowcount
 
-    def getEternalTableCount(id):
-        Dao.cursor.execute('select id from eternal_table where id = %s', id)
+    def getEternalTableCount(id, league):
+        Dao.cursor.execute('select id from eternal_table where id = %s and league = %s', (id, league))
         return Dao.cursor.rowcount
 
     def getNotCompleteClub():
