@@ -66,6 +66,21 @@ class Dao(object):
         sql += ')'
         Dao.cursor.execute(sql)
 
+    @staticmethod
+    def createCareerTable():
+        sql  = 'create table if not exists career ('
+        sql += 'id varchar(10) not null,'
+        sql += 'season varchar(5),'
+        sql += 'club varchar(5),'
+        sql += '`match` tinyint,'
+        sql += 'assist tinyint,'
+        sql += 'yellow tinyint,'
+        sql += 'red tinyint,'
+        sql += 'minute smallint,'
+        sql += 'primary key (id, season, club)'
+        sql += ')'
+        Dao.cursor.execute(sql)
+
     def getClubCount(id):
         Dao.cursor.execute('select id from club where id = %s', id)
         return Dao.cursor.rowcount
@@ -76,6 +91,10 @@ class Dao(object):
 
     def getPlayerCount(id):
         Dao.cursor.execute('select id from player where id = %s', (id))
+        return Dao.cursor.rowcount
+
+    def getCareerCount(id, season, club):
+        Dao.cursor.execute('select id from career where id = %s and season = %s and club = %s', (id, season, club))
         return Dao.cursor.rowcount
 
     def getNotCompleteClub():
@@ -94,8 +113,16 @@ class Dao(object):
         sql = 'insert into player values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
         Dao.cursor.execute(sql, param)
 
+    def insertCareer(param):
+        sql = 'insert into career values(%s, %s, %s, %s, %s, %s, %s, %s, %s)'
+        Dao.cursor.execute(sql, param)
+
     def updatePlayer(param):
         sql = 'update player set full_name = %s, name = %s, nationality = %s, position = %s, height = %s, modify_date = %s where id = %s'
+        Dao.cursor.execute(sql, param)
+
+    def updateCareer(param):
+        sql = 'update career set `match` = %s, goal = %s, assist = %s, yellow = %s, red = %s, minute = %s where id = %s and season = %s and club = %s'
         Dao.cursor.execute(sql, param)
 
     def updateEternalTable(param):

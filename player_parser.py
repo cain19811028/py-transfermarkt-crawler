@@ -55,6 +55,39 @@ def parsePlayerData(playerId):
 
     print(fullName + ", " + name + ", " + birthday + ", " + nationality + ", " + height + ", " + position)
 
+def parsePerformanceData(playerId):
+    url  = DOMAIN + "player/detaillierteleistungsdaten/spieler/" + str(playerId) + "/plus/1"
+    print(url)
+
+    response = requests.get(url, headers = HEADERS)
+    content = html.fromstring(response.text)
+
+    dataBlock = content.xpath('//div[@id="yw1"]/table[@class="items"]/tbody/tr')
+    for row in dataBlock:
+        td = row.xpath('td')
+        season = td[0].text_content()
+        club = row.xpath('td[4]/a')[0].attrib['id']
+        match = td[4].text_content().replace("-", "0")
+        goal = td[5].text_content().replace("-", "0")
+        assist = td[6].text_content().replace("-", "0")
+        own = td[7].text_content().replace("-", "0")
+        sub_on = td[8].text_content().replace("-", "0")
+        sub_off = td[9].text_content().replace("-", "0")
+        yellow = td[10].text_content().replace("-", "0")
+        yellow2 = td[11].text_content().replace("-", "0")
+        red = td[12].text_content().replace("-", "0")
+        minute = re.sub("\D", "", td[15].text_content().replace("-", "0"))
+
+        count = Dao.getCareerCount(playerId, season, club)
+        if(count == 0):
+            param = (playerId, season, club, match, goal, assist, yellow, red, minute)
+            Dao.insertCareer(param)
+        else:
+            param = (match, goal, assist, yellow, red, minute, playerId, season, club)
+            Dao.updateCareer(param)
+
+        print(season + ", " + club + ", " + match + ", " + goal + ", " + assist + ", " + own + ", " + yellow + ", " + red + ", " + minute)
+
 def getPositionId(position):
     return {
         'Keeper' : '1',
@@ -78,7 +111,9 @@ Main
 """
 Dao.init()
 Dao.createPlayerTable()
+Dao.createCareerTable()
 
 playerId = 27511
 
 parsePlayerData(playerId)
+parsePerformanceData(playerId)
