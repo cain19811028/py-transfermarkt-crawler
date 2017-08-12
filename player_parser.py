@@ -7,6 +7,7 @@ from lxml import html
 
 DOMAIN = "https://www.transfermarkt.co.uk/"
 HEADERS = {'User-Agent': 'Mozilla/5.0'}
+CLUB_SET = {}
 
 def parsePlayerData(playerId):
     url  = DOMAIN + "player/profil/spieler/" + str(playerId)
@@ -78,15 +79,21 @@ def parsePerformanceData(playerId):
         red = td[12].text_content().replace("-", "0")
         minute = re.sub("\D", "", td[15].text_content().replace("-", "0"))
 
-        count = Dao.getCareerCount(playerId, season, club)
-        if(count == 0):
-            param = (playerId, season, club, match, goal, assist, yellow, red, minute)
-            Dao.insertCareer(param)
-        else:
-            param = (match, goal, assist, yellow, red, minute, playerId, season, club)
-            Dao.updateCareer(param)
+        if club in CLUB_SET:
+            count = Dao.getCareerCount(playerId, season, club)
+            if(count == 0):
+                param = (playerId, season, club, match, goal, assist, yellow, red, minute)
+                Dao.insertCareer(param)
+            else:
+                param = (match, goal, assist, yellow, red, minute, playerId, season, club)
+                Dao.updateCareer(param)
 
         print(season + ", " + club + ", " + match + ", " + goal + ", " + assist + ", " + own + ", " + yellow + ", " + red + ", " + minute)
+
+def buildClubSet():
+    result = Dao.getAllClubId()
+    global CLUB_SET
+    CLUB_SET = { item['id'] for item in result }
 
 def getPositionId(position):
     return {
@@ -115,5 +122,6 @@ Dao.createCareerTable()
 
 playerId = 27511
 
+buildClubSet()
 parsePlayerData(playerId)
 parsePerformanceData(playerId)
