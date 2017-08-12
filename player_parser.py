@@ -1,6 +1,7 @@
 import datetime
 import re
 import requests
+import time
 from common.dao import Dao
 from lxml import html
 
@@ -15,26 +16,32 @@ def parsePlayerData(playerId):
     content = html.fromstring(response.text)
 
     # name
-    nameBlock = content.xpath('//div[@class="dataName"]/h1/b')[0]
+    nameBlock = content.xpath('//div[@class="dataName"]/h1')[0]
+    fullName = nameBlock.text_content()
+    nameBlock = nameBlock.xpath('b')[0]
     name = nameBlock.text_content()
 
     # full name
     dataBlock = content.xpath('//table[@class="auflistung"]')[0]
-    fullName = dataBlock[0].xpath('td')[0].text_content().strip()
+    tempTH = dataBlock[0].xpath('th')[0].text_content()
+    if tempTH == "Name in home country:":
+        fullName = dataBlock[0].xpath('td')[0].text_content().strip()
 
     # birthday
-    birthday = dataBlock[1].xpath('td')[0].xpath('a')[0].attrib['href']
-    birthday = birthday.rsplit('/', 1)[1].replace("-", "")
+    birthday = content.xpath('//span[@itemprop="birthDate"]')[0].text_content()
+    birthday = birthday.split('(')[0].strip().replace(',', '')
+    tempTime = time.mktime(time.strptime(birthday, '%b %d %Y'))
+    birthday = time.strftime("%Y%m%d", time.gmtime(tempTime))
 
     # nationality
     nationality = content.xpath('//a[@class="vereinprofil_tooltip"]')[0].attrib['id']
 
     # position
-    position = content.xpath('//div[@class="large-5 columns infos small-12"]')[0].text_content()
-    position = getPositionId(position.split(':')[1].strip())
+    positionBlock = content.xpath('//div[@class="large-5 columns infos small-12"]/div[@class="auflistung"]/div')
+    position = getPositionId(positionBlock[0].text_content().split(':')[1].strip())
 
     # height
-    height = dataBlock[4].xpath('td')[0].text_content().strip()
+    height = content.xpath('//span[@itemprop="height"]')[0].text_content().strip()
     height = re.sub("\D", "", height)
 
     # build player data
