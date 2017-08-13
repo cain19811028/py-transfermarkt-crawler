@@ -60,6 +60,7 @@ class Dao(object):
         sql += 'nationality int,'
         sql += 'position tinyint,'
         sql += 'height tinyint,'
+        sql += 'score tinyint,'
         sql += 'retirement tinyint,'
         sql += 'modify_date datetime,'
         sql += 'primary key (id)'
@@ -148,7 +149,7 @@ class Dao(object):
         Dao.cursor.execute(sql, param)
 
     def insertPlayer(param):
-        sql = 'insert into player values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
+        sql = 'insert into player values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
         Dao.cursor.execute(sql, param)
 
     def insertMarket(param):

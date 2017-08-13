@@ -27,7 +27,7 @@ def parsePlayerData(playerId):
     # full name
     dataBlock = content.xpath('//table[@class="auflistung"]')[0]
     tempTH = dataBlock[0].xpath('th')[0].text_content()
-    if tempTH == "Name in home country:":
+    if tempTH == "Name in home country:" or "Complete name:":
         fullName = dataBlock[0].xpath('td')[0].text_content().strip()
 
     # birthday
@@ -50,7 +50,7 @@ def parsePlayerData(playerId):
     # build player data
     count = Dao.getPlayerCount(playerId)
     if(count == 0):
-        param = (playerId, fullName, name, '', birthday, nationality, position, height, 0, NOW_DATE)
+        param = (playerId, fullName, name, '', birthday, nationality, position, height, 0, 0, NOW_DATE)
         Dao.insertPlayer(param)
     else:
         param = (fullName, name, nationality, position, height, NOW_DATE, playerId)
@@ -186,7 +186,7 @@ Dao.createCareerTable()
 Dao.createNationTable()
 Dao.createMarketTable()
 
-playerId = 27511
+playerId = 46741
 
 buildClubSet()
 parsePlayerData(playerId)
