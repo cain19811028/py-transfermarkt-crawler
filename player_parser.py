@@ -1,4 +1,5 @@
 import datetime
+import json
 import re
 import requests
 import time
@@ -52,10 +53,41 @@ def parsePlayerData(playerId):
         param = (playerId, fullName, name, '', birthday, nationality, position, height, 0, NOW_DATE)
         Dao.insertPlayer(param)
     else:
-        param = (fullName, name, nationality, position, height, datetime.datetime.today().strftime('%Y%m%d'), playerId)
+        param = (fullName, name, nationality, position, height, NOW_DATE, playerId)
         Dao.updatePlayer(param)
 
     print(fullName + ", " + name + ", " + birthday + ", " + nationality + ", " + height + ", " + position)
+
+    parseMarketData(playerId, response.text)
+
+def parseMarketData(playerId, response):
+
+    marketData = response.split("'Marktwert','data':")[1]
+    marketData = marketData.split("}],'legend'")[0].replace("'", "\"")
+    marketData = json.loads(marketData)
+    tempClub = ''
+    for data in marketData:
+        club = data['marker']['symbol']
+        if club != 'circle':
+            club = club.split('/tiny/')[1]
+            club = club.split('.')[0].split('_')[0]
+            tempClub = club
+        else:
+            club = tempClub
+        marketValue = str(data['y'])
+        recrodDate = data['datum_mw'].replace(',', '')
+        tempTime = time.mktime(time.strptime(recrodDate, '%b %d %Y'))
+        recrodDate = time.strftime("%Y%m%d", time.gmtime(tempTime))
+
+        count = Dao.getMarketCount(playerId, club, recrodDate)
+        if(count == 0):
+            param = (playerId, club, recrodDate, marketValue, NOW_DATE)
+            Dao.insertMarket(param)
+        else:
+            param = (marketValue, NOW_DATE, playerId, club, recrodDate)
+            Dao.updateMarket(param)
+
+        print(club + ", " + marketValue + ", " + recrodDate)
 
 def parsePerformanceData(playerId):
     url  = DOMAIN + "player/detaillierteleistungsdaten/spieler/" + str(playerId) + "/plus/1"
@@ -152,6 +184,7 @@ Dao.init()
 Dao.createPlayerTable()
 Dao.createCareerTable()
 Dao.createNationTable()
+Dao.createMarketTable()
 
 playerId = 27511
 

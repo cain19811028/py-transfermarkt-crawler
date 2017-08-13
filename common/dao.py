@@ -95,6 +95,18 @@ class Dao(object):
         sql += ')'
         Dao.cursor.execute(sql)
 
+    @staticmethod
+    def createMarketTable():
+        sql  = 'create table if not exists market ('
+        sql += 'id varchar(10) not null,'
+        sql += 'club varchar(5),'
+        sql += 'record_date varchar(8),'
+        sql += 'market_value bigint,'
+        sql += 'modify_date datetime,'
+        sql += 'primary key (id, club, record_date)'
+        sql += ')'
+        Dao.cursor.execute(sql)
+
     def getClubCount(id):
         Dao.cursor.execute('select id from club where id = %s', id)
         return Dao.cursor.rowcount
@@ -109,6 +121,10 @@ class Dao(object):
 
     def getPlayerCount(id):
         Dao.cursor.execute('select id from player where id = %s', (id))
+        return Dao.cursor.rowcount
+
+    def getMarketCount(id, club, record_date):
+        Dao.cursor.execute('select id from market where id = %s and club = %s and record_date = %s', (id, club, record_date))
         return Dao.cursor.rowcount
 
     def getCareerCount(id, season, club):
@@ -135,6 +151,10 @@ class Dao(object):
         sql = 'insert into player values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
         Dao.cursor.execute(sql, param)
 
+    def insertMarket(param):
+        sql = 'insert into market values(%s, %s, %s, %s, %s)'
+        Dao.cursor.execute(sql, param)
+
     def insertCareer(param):
         sql = 'insert into career values(%s, %s, %s, %s, %s, %s, %s, %s, %s)'
         Dao.cursor.execute(sql, param)
@@ -145,6 +165,10 @@ class Dao(object):
 
     def updatePlayer(param):
         sql = 'update player set full_name = %s, name = %s, nationality = %s, position = %s, height = %s, modify_date = %s where id = %s'
+        Dao.cursor.execute(sql, param)
+
+    def updateMarket(param):
+        sql = 'update market set market_value = %s, modify_date = %s where id = %s and club = %s and record_date = %s'
         Dao.cursor.execute(sql, param)
 
     def updateCareer(param):
