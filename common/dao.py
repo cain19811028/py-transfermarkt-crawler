@@ -81,6 +81,20 @@ class Dao(object):
         sql += ')'
         Dao.cursor.execute(sql)
 
+    @staticmethod
+    def createNationTable():
+        sql  = 'create table if not exists national_team ('
+        sql += 'id varchar(10) not null,'
+        sql += 'nationality int,'
+        sql += 'appearance tinyint,'
+        sql += 'goal tinyint,'
+        sql += 'debut_date varchar(8),'
+        sql += 'debut_age varchar(30),'
+        sql += 'modify_date datetime,'
+        sql += 'primary key (id, nationality)'
+        sql += ')'
+        Dao.cursor.execute(sql)
+
     def getClubCount(id):
         Dao.cursor.execute('select id from club where id = %s', id)
         return Dao.cursor.rowcount
@@ -99,6 +113,10 @@ class Dao(object):
 
     def getCareerCount(id, season, club):
         Dao.cursor.execute('select id from career where id = %s and season = %s and club = %s', (id, season, club))
+        return Dao.cursor.rowcount
+
+    def getNationalCount(id):
+        Dao.cursor.execute('select id from national_team where id = %s', (id))
         return Dao.cursor.rowcount
 
     def getNotCompleteClub():
@@ -121,12 +139,20 @@ class Dao(object):
         sql = 'insert into career values(%s, %s, %s, %s, %s, %s, %s, %s, %s)'
         Dao.cursor.execute(sql, param)
 
+    def insertNationalTeam(param):
+        sql = 'insert into national_team values(%s, %s, %s, %s, %s, %s, %s)'
+        Dao.cursor.execute(sql, param)
+
     def updatePlayer(param):
         sql = 'update player set full_name = %s, name = %s, nationality = %s, position = %s, height = %s, modify_date = %s where id = %s'
         Dao.cursor.execute(sql, param)
 
     def updateCareer(param):
         sql = 'update career set appearance = %s, goal = %s, assist = %s, yellow = %s, red = %s, minute = %s where id = %s and season = %s and club = %s'
+        Dao.cursor.execute(sql, param)
+
+    def updateNationalTeam(param):
+        sql = 'update national_team set appearance = %s, goal = %s, debut_date = %s, debut_age = %s, modify_date = %s where id = %s and nationality = %s'
         Dao.cursor.execute(sql, param)
 
     def updateEternalTable(param):

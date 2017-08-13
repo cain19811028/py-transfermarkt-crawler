@@ -8,6 +8,7 @@ from lxml import html
 DOMAIN = "https://www.transfermarkt.co.uk/"
 HEADERS = {'User-Agent': 'Mozilla/5.0'}
 CLUB_SET = {}
+NOW_DATE = datetime.datetime.today().strftime('%Y%m%d')
 
 def parsePlayerData(playerId):
     url  = DOMAIN + "player/profil/spieler/" + str(playerId)
@@ -48,7 +49,7 @@ def parsePlayerData(playerId):
     # build player data
     count = Dao.getPlayerCount(playerId)
     if(count == 0):
-        param = (playerId, fullName, name, '', birthday, nationality, position, height, 0, datetime.datetime.today().strftime('%Y%m%d'))
+        param = (playerId, fullName, name, '', birthday, nationality, position, height, 0, NOW_DATE)
         Dao.insertPlayer(param)
     else:
         param = (fullName, name, nationality, position, height, datetime.datetime.today().strftime('%Y%m%d'), playerId)
@@ -93,6 +94,34 @@ def parsePerformanceData(playerId):
 
         print(season + ", " + club + ", " + appearance + ", " + goal + ", " + assist + ", " + yellow + ", " + red + ", " + minute)
 
+def parseNationalTeamData(playerId):
+    url  = DOMAIN + "player/nationalmannschaft/spieler/" + str(playerId)
+    print(url)
+
+    response = requests.get(url, headers = HEADERS)
+    content = html.fromstring(response.text)
+
+    dataBlock = content.xpath('//div[@class="large-8 columns"]/div[@class="box"][1]/table/tbody/tr')
+    td = dataBlock[1].xpath('td')
+
+    nationality = td[1].xpath('//a[@class="vereinprofil_tooltip"]')[0].attrib['id']
+    appearance = td[4].text_content().replace("-", "0")
+    goal = td[5].text_content().replace("-", "0")
+    debut_date = td[3].text_content().strip().replace(',', '')
+    tempTime = time.mktime(time.strptime(debut_date, '%b %d %Y'))
+    debut_date = time.strftime("%Y%m%d", time.gmtime(tempTime))
+    debut_age = td[7].text_content().strip()
+
+    count = Dao.getNationalCount(playerId)
+    if(count == 0):
+        param = (playerId, nationality, appearance, goal, debut_date, debut_age, NOW_DATE)
+        Dao.insertNationalTeam(param)
+    else:
+        param = (appearance, goal, debut_date, debut_age, NOW_DATE, playerId, nationality)
+        Dao.updateNationalTeam(param)
+
+    print(nationality + ", " + appearance + ", " + goal + ", " + debut_date + ", " + debut_age)
+
 def buildClubSet():
     result = Dao.getAllClubId()
     global CLUB_SET
@@ -122,9 +151,11 @@ Main
 Dao.init()
 Dao.createPlayerTable()
 Dao.createCareerTable()
+Dao.createNationTable()
 
 playerId = 27511
 
 buildClubSet()
 parsePlayerData(playerId)
 parsePerformanceData(playerId)
+parseNationalTeamData(playerId)
