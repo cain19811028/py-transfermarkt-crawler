@@ -27,7 +27,7 @@ def parsePlayerData(playerId):
     # full name
     dataBlock = content.xpath('//table[@class="auflistung"]')[0]
     tempTH = dataBlock[0].xpath('th')[0].text_content()
-    if tempTH == "Name in home country:" or "Complete name:":
+    if tempTH == "Name in home country:" or tempTH == "Complete name:":
         fullName = dataBlock[0].xpath('td')[0].text_content().strip()
 
     # birthday
@@ -186,7 +186,7 @@ Dao.createCareerTable()
 Dao.createNationTable()
 Dao.createMarketTable()
 
-playerId = 46741
+playerId = 50202
 
 buildClubSet()
 parsePlayerData(playerId)
