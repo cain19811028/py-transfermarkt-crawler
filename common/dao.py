@@ -26,7 +26,7 @@ class Dao(object):
         sql += 'level tinyint,'
         sql += 'years smallint,'
         sql += 'first smallint,'
-        sql += '`match` smallint,'
+        sql += 'appearance smallint,'
         sql += 'win smallint,'
         sql += 'draw smallint,'
         sql += 'loss smallint,'
@@ -72,7 +72,7 @@ class Dao(object):
         sql += 'id varchar(10) not null,'
         sql += 'season varchar(5),'
         sql += 'club varchar(5),'
-        sql += '`match` tinyint,'
+        sql += 'appearance tinyint,'
         sql += 'assist tinyint,'
         sql += 'yellow tinyint,'
         sql += 'red tinyint,'
@@ -126,11 +126,11 @@ class Dao(object):
         Dao.cursor.execute(sql, param)
 
     def updateCareer(param):
-        sql = 'update career set `match` = %s, goal = %s, assist = %s, yellow = %s, red = %s, minute = %s where id = %s and season = %s and club = %s'
+        sql = 'update career set appearance = %s, goal = %s, assist = %s, yellow = %s, red = %s, minute = %s where id = %s and season = %s and club = %s'
         Dao.cursor.execute(sql, param)
 
     def updateEternalTable(param):
-        sql = 'update eternal_table set league = %s, level = %s, years = %s, first = %s, `match` = %s, win = %s, draw = %s, loss = %s, goal = %s, point = %s where id = %s'
+        sql = 'update eternal_table set league = %s, level = %s, years = %s, first = %s, appearance = %s, win = %s, draw = %s, loss = %s, goal = %s, point = %s where id = %s'
         Dao.cursor.execute(sql, param)
 
     def updateClubExtraData(param):

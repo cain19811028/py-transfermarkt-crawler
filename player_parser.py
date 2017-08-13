@@ -68,7 +68,7 @@ def parsePerformanceData(playerId):
         td = row.xpath('td')
         season = td[0].text_content()
         club = row.xpath('td[4]/a')[0].attrib['id']
-        match = td[4].text_content().replace("-", "0")
+        appearance = td[4].text_content().replace("-", "0")
         goal = td[5].text_content().replace("-", "0")
         if len(td) > 15:
             assist = td[6].text_content().replace("-", "0")
@@ -85,13 +85,13 @@ def parsePerformanceData(playerId):
         if club in CLUB_SET:
             count = Dao.getCareerCount(playerId, season, club)
             if(count == 0):
-                param = (playerId, season, club, match, goal, assist, yellow, red, minute)
+                param = (playerId, season, club, appearance, goal, assist, yellow, red, minute)
                 Dao.insertCareer(param)
             else:
-                param = (match, goal, assist, yellow, red, minute, playerId, season, club)
+                param = (appearance, goal, assist, yellow, red, minute, playerId, season, club)
                 Dao.updateCareer(param)
 
-        print(season + ", " + club + ", " + match + ", " + goal + ", " + assist + ", " + yellow + ", " + red + ", " + minute)
+        print(season + ", " + club + ", " + appearance + ", " + goal + ", " + assist + ", " + yellow + ", " + red + ", " + minute)
 
 def buildClubSet():
     result = Dao.getAllClubId()
