@@ -53,7 +53,7 @@ class Dao(object):
     def createPlayerTable():
         sql  = 'create table if not exists player ('
         sql += 'id varchar(10) not null,'
-        sql += 'full_name varchar(30),'
+        sql += 'full_name varchar(40),'
         sql += 'name varchar(20),'
         sql += 'cname varchar(15),'
         sql += 'birthday varchar(8),'
@@ -116,6 +116,10 @@ class Dao(object):
         Dao.cursor.execute('select distinct id from club')
         return Dao.cursor.fetchall()
 
+    def getAllCountryId():
+        Dao.cursor.execute('select distinct id from country')
+        return Dao.cursor.fetchall()
+
     def getEternalTableCount(id, league):
         Dao.cursor.execute('select id from eternal_table where id = %s and league = %s', (id, league))
         return Dao.cursor.rowcount
@@ -165,7 +169,7 @@ class Dao(object):
         Dao.cursor.execute(sql, param)
 
     def updatePlayer(param):
-        sql = 'update player set full_name = %s, name = %s, nationality = %s, position = %s, height = %s, modify_date = %s where id = %s'
+        sql = 'update player set nationality = %s, position = %s, height = %s, modify_date = %s where id = %s'
         Dao.cursor.execute(sql, param)
 
     def updateMarket(param):

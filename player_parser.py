@@ -9,6 +9,7 @@ from lxml import html
 DOMAIN = "https://www.transfermarkt.co.uk/"
 HEADERS = {'User-Agent': 'Mozilla/5.0'}
 CLUB_SET = {}
+COUNTRY_SET = {}
 NOW_DATE = datetime.datetime.today().strftime('%Y%m%d')
 
 def parsePlayerData(playerId):
@@ -53,7 +54,7 @@ def parsePlayerData(playerId):
         param = (playerId, fullName, name, '', birthday, nationality, position, height, 0, 0, NOW_DATE)
         Dao.insertPlayer(param)
     else:
-        param = (fullName, name, nationality, position, height, NOW_DATE, playerId)
+        param = (nationality, position, height, NOW_DATE, playerId)
         Dao.updatePlayer(param)
 
     print(fullName + ", " + name + ", " + birthday + ", " + nationality + ", " + height + ", " + position)
@@ -137,27 +138,33 @@ def parseNationalTeamData(playerId):
     td = dataBlock[1].xpath('td')
 
     nationality = td[1].xpath('//a[@class="vereinprofil_tooltip"]')[0].attrib['id']
-    appearance = td[4].text_content().replace("-", "0")
-    goal = td[5].text_content().replace("-", "0")
-    debut_date = td[3].text_content().strip().replace(',', '')
-    tempTime = time.mktime(time.strptime(debut_date, '%b %d %Y'))
-    debut_date = time.strftime("%Y%m%d", time.gmtime(tempTime))
-    debut_age = td[7].text_content().strip()
 
-    count = Dao.getNationalCount(playerId)
-    if(count == 0):
-        param = (playerId, nationality, appearance, goal, debut_date, debut_age, NOW_DATE)
-        Dao.insertNationalTeam(param)
-    else:
-        param = (appearance, goal, debut_date, debut_age, NOW_DATE, playerId, nationality)
-        Dao.updateNationalTeam(param)
+    if nationality in COUNTRY_SET:
+        appearance = td[4].text_content().replace("-", "0")
+        goal = td[5].text_content().replace("-", "0")
+        debut_date = td[3].text_content().strip().replace(',', '')
+        tempTime = time.mktime(time.strptime(debut_date, '%b %d %Y'))
+        debut_date = time.strftime("%Y%m%d", time.gmtime(tempTime))
+        debut_age = td[7].text_content().strip()
+        count = Dao.getNationalCount(playerId)
+        if(count == 0):
+            param = (playerId, nationality, appearance, goal, debut_date, debut_age, NOW_DATE)
+            Dao.insertNationalTeam(param)
+        else:
+            param = (appearance, goal, debut_date, debut_age, NOW_DATE, playerId, nationality)
+            Dao.updateNationalTeam(param)
 
-    print(nationality + ", " + appearance + ", " + goal + ", " + debut_date + ", " + debut_age)
+        print(nationality + ", " + appearance + ", " + goal + ", " + debut_date + ", " + debut_age)
 
 def buildClubSet():
     result = Dao.getAllClubId()
     global CLUB_SET
     CLUB_SET = { item['id'] for item in result }
+
+def buildCountrySet():
+    result = Dao.getAllCountryId()
+    global COUNTRY_SET
+    COUNTRY_SET = { item['id'] for item in result }
 
 def getPositionId(position):
     return {
@@ -186,9 +193,10 @@ Dao.createCareerTable()
 Dao.createNationTable()
 Dao.createMarketTable()
 
-playerId = 50202
+playerId = 3160
 
 buildClubSet()
+buildCountrySet()
 parsePlayerData(playerId)
 parsePerformanceData(playerId)
 parseNationalTeamData(playerId)
