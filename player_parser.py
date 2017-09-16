@@ -39,6 +39,8 @@ def parsePlayerData(playerId):
 
     # nationality
     nationality = content.xpath('//a[@class="vereinprofil_tooltip"]')[0].attrib['id']
+    if int(nationality) not in COUNTRY_SET:
+        nationality = getNationalId(nationality)
 
     # position
     positionBlock = content.xpath('//div[@class="large-5 columns infos small-12"]/div[@class="auflistung"]/div')
@@ -184,6 +186,15 @@ def getPositionId(position):
         'Centre-Forward': '14'
     }[position]
 
+def getNationalId(nationality):
+    return {
+        '7658' : '3439',    # BRAZIL U20
+        '9323' : '3377',    # FRANCE U21
+        '3817' : '3262',    # GERMANY U21
+        '12609' : '3375',   # SPAIN U19
+        '9567' : '3375'     # SPAIN U21
+    }[nationality]
+
 """
 Main
 """
@@ -193,10 +204,12 @@ Dao.createCareerTable()
 Dao.createNationTable()
 Dao.createMarketTable()
 
-playerId = 3160
-
 buildClubSet()
 buildCountrySet()
-parsePlayerData(playerId)
-parsePerformanceData(playerId)
-parseNationalTeamData(playerId)
+
+playerSet = [56818]
+
+for playerId in playerSet:
+    parsePlayerData(playerId)
+    parsePerformanceData(playerId)
+    parseNationalTeamData(playerId)
