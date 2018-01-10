@@ -59,7 +59,7 @@ class Dao(object):
         sql += 'birthday varchar(8),'
         sql += 'nationality int,'
         sql += 'position tinyint,'
-        sql += 'height tinyint,'
+        sql += 'height int,'
         sql += 'score tinyint,'
         sql += 'retirement tinyint,'
         sql += 'modify_date datetime,'

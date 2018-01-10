@@ -49,6 +49,7 @@ def parsePlayerData(playerId):
     # height
     height = content.xpath('//span[@itemprop="height"]')[0].text_content().strip()
     height = re.sub("\D", "", height)
+    height = int(height)
 
     # build player data
     count = Dao.getPlayerCount(playerId)
@@ -207,7 +208,7 @@ Dao.createMarketTable()
 buildClubSet()
 buildCountrySet()
 
-playerSet = [56818]
+playerSet = [80444]
 
 for playerId in playerSet:
     parsePlayerData(playerId)
