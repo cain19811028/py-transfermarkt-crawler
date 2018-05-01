@@ -8,7 +8,7 @@ class Dao(object):
         'user': 'root',
         'passwd': '',
         'charset':'utf8mb4',
-        'db':'transfermarkt',
+        'db':'football',
         'autocommit': True,
         'cursorclass':pymysql.cursors.DictCursor
     }
@@ -44,7 +44,7 @@ class Dao(object):
         sql += 'nation smallint,'
         sql += 'founded varchar(4),'
         sql += 'ground varchar(50),'
-        sql += 'capacity smallint,'
+        sql += 'capacity int,'
         sql += 'primary key (id)'
         sql += ')'
         Dao.cursor.execute(sql)
@@ -55,12 +55,10 @@ class Dao(object):
         sql += 'id varchar(10) not null,'
         sql += 'full_name varchar(40),'
         sql += 'name varchar(20),'
-        sql += 'cname varchar(15),'
         sql += 'birthday varchar(8),'
         sql += 'nationality int,'
         sql += 'position tinyint,'
         sql += 'height int,'
-        sql += 'score tinyint,'
         sql += 'retirement tinyint,'
         sql += 'modify_date datetime,'
         sql += 'primary key (id)'

@@ -13,28 +13,28 @@ LEAGUE = {}
 
 # European
 LEAGUE["England"]     = {"id":"3299", "leagueName":"premier-league", "leagueSimplify":"GB1", "startYear":"1992"}
-LEAGUE["Spain"]       = {"id":"3375", "leagueName":"laliga", "leagueSimplify":"ES1", "startYear":"1928"}
-LEAGUE["Germany"]     = {"id":"3262", "leagueName":"1-bundesliga", "leagueSimplify":"L1", "startYear":"1963"}
-LEAGUE["Italy"]       = {"id":"3376", "leagueName":"serie-a", "leagueSimplify":"IT1", "startYear":"1929"}
-LEAGUE["France"]      = {"id":"3377", "leagueName":"ligue-1", "leagueSimplify":"FR1", "startYear":"1980"}
-LEAGUE["Portugal"]    = {"id":"3300", "leagueName":"liga-nos", "leagueSimplify":"PO1", "startYear":"1990"}
-LEAGUE["Turkey"]      = {"id":"3381", "leagueName":"super-lig", "leagueSimplify":"TR1", "startYear":"1990"}
-LEAGUE["Russia"]      = {"id":"3448", "leagueName":"premier-liga", "leagueSimplify":"RU1", "startYear":"1992"}
-LEAGUE["Netherlands"] = {"id":"3379", "leagueName":"eredivisie", "leagueSimplify":"NL1", "startYear":"1954"}
-LEAGUE["Belgium"]     = {"id":"3382", "leagueName":"jupiler-pro-league", "leagueSimplify":"BE1", "startYear":"2000"}
-LEAGUE["Greece"]      = {"id":"3378", "leagueName":"super-league", "leagueSimplify":"GR1", "startYear":"1988"}
+# LEAGUE["Spain"]       = {"id":"3375", "leagueName":"laliga", "leagueSimplify":"ES1", "startYear":"1928"}
+# LEAGUE["Germany"]     = {"id":"3262", "leagueName":"1-bundesliga", "leagueSimplify":"L1", "startYear":"1963"}
+# LEAGUE["Italy"]       = {"id":"3376", "leagueName":"serie-a", "leagueSimplify":"IT1", "startYear":"1929"}
+# LEAGUE["France"]      = {"id":"3377", "leagueName":"ligue-1", "leagueSimplify":"FR1", "startYear":"1980"}
+# LEAGUE["Portugal"]    = {"id":"3300", "leagueName":"liga-nos", "leagueSimplify":"PO1", "startYear":"1990"}
+# LEAGUE["Turkey"]      = {"id":"3381", "leagueName":"super-lig", "leagueSimplify":"TR1", "startYear":"1990"}
+# LEAGUE["Russia"]      = {"id":"3448", "leagueName":"premier-liga", "leagueSimplify":"RU1", "startYear":"1992"}
+# LEAGUE["Netherlands"] = {"id":"3379", "leagueName":"eredivisie", "leagueSimplify":"NL1", "startYear":"1954"}
+# LEAGUE["Belgium"]     = {"id":"3382", "leagueName":"jupiler-pro-league", "leagueSimplify":"BE1", "startYear":"2000"}
+# LEAGUE["Greece"]      = {"id":"3378", "leagueName":"super-league", "leagueSimplify":"GR1", "startYear":"1988"}
 
 # America
-LEAGUE["Brazil"]      = {"id":"3439", "leagueName":"campeonato-brasileiro-serie-a", "leagueSimplify":"BRA1", "startYear":"2005"}
-LEAGUE["Argentina"]   = {"id":"3437", "leagueName":"primera-division", "leagueSimplify":"AR1N", "startYear":"2014"}
-LEAGUE["Mexico"]      = {"id":"6303", "leagueName":"liga-mx-clausura", "leagueSimplify":"MEX1", "startYear":"2006"}
-LEAGUE["Mexico"]      = {"id":"6303", "leagueName":"liga-mx-apertura", "leagueSimplify":"MEXA", "startYear":"2006"}
-LEAGUE["America"]     = {"id":"3505", "leagueName":"major-league-soccer", "leagueSimplify":"MLS1", "startYear":"1995"}
+# LEAGUE["Brazil"]      = {"id":"3439", "leagueName":"campeonato-brasileiro-serie-a", "leagueSimplify":"BRA1", "startYear":"2005"}
+# LEAGUE["Argentina"]   = {"id":"3437", "leagueName":"primera-division", "leagueSimplify":"AR1N", "startYear":"2014"}
+# LEAGUE["Mexico"]      = {"id":"6303", "leagueName":"liga-mx-clausura", "leagueSimplify":"MEX1", "startYear":"2006"}
+# LEAGUE["Mexico"]      = {"id":"6303", "leagueName":"liga-mx-apertura", "leagueSimplify":"MEXA", "startYear":"2006"}
+# LEAGUE["America"]     = {"id":"3505", "leagueName":"major-league-soccer", "leagueSimplify":"MLS1", "startYear":"1995"}
 
 # Asia
-LEAGUE["China"]       = {"id":"5598", "leagueName":"chinese-super-league", "leagueSimplify":"CSL", "startYear":"1993"}
-LEAGUE["Japan"]       = {"id":"3435", "leagueName":"j1-league", "leagueSimplify":"JAP1", "startYear":"2004"}
-LEAGUE["Korea"]       = {"id":"3589", "leagueName":"k-league-classic", "leagueSimplify":"RSK1", "startYear":"2009"}
+# LEAGUE["China"]       = {"id":"5598", "leagueName":"chinese-super-league", "leagueSimplify":"CSL", "startYear":"1993"}
+# LEAGUE["Japan"]       = {"id":"3435", "leagueName":"j1-league", "leagueSimplify":"JAP1", "startYear":"2004"}
+# LEAGUE["Korea"]       = {"id":"3589", "leagueName":"k-league-classic", "leagueSimplify":"RSK1", "startYear":"2009"}
 
 def getEternalTable(data):
     url  = DOMAIN + data["leagueName"] + "/ewigeTabelle/wettbewerb/"
