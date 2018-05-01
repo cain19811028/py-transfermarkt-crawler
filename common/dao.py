@@ -106,86 +106,107 @@ class Dao(object):
         sql += ')'
         Dao.cursor.execute(sql)
 
+    @staticmethod
     def getClubCount(id):
         Dao.cursor.execute('select id from club where id = %s', id)
         return Dao.cursor.rowcount
 
+    @staticmethod
     def getAllClubId():
         Dao.cursor.execute('select distinct id from club')
         return Dao.cursor.fetchall()
 
+    @staticmethod
     def getAllCountryId():
         Dao.cursor.execute('select distinct id from country')
         return Dao.cursor.fetchall()
 
+    @staticmethod
     def getEternalTableCount(id, league):
         Dao.cursor.execute('select id from eternal_table where id = %s and league = %s', (id, league))
         return Dao.cursor.rowcount
 
+    @staticmethod
     def getPlayerCount(id):
         Dao.cursor.execute('select id from player where id = %s', (id))
         return Dao.cursor.rowcount
 
+    @staticmethod
     def getMarketCount(id, club, record_date):
         Dao.cursor.execute('select id from market where id = %s and club = %s and record_date = %s', (id, club, record_date))
         return Dao.cursor.rowcount
 
+    @staticmethod
     def getCareerCount(id, season, club):
         Dao.cursor.execute('select id from career where id = %s and season = %s and club = %s', (id, season, club))
         return Dao.cursor.rowcount
 
+    @staticmethod
     def getNationalCount(id):
         Dao.cursor.execute('select id from national_team where id = %s', (id))
         return Dao.cursor.rowcount
 
+    @staticmethod
     def getNotCompleteClub():
         Dao.cursor.execute('select id from club where founded is null or ground is null or capacity is null')
         return Dao.cursor.fetchall()
 
+    @staticmethod
     def insertClub(param):
         sql = 'insert into club (id, name, nation) values(%s, %s, %s)'
         Dao.cursor.execute(sql, param)
 
+    @staticmethod
     def insertEternalTable(param):
         sql = 'insert into eternal_table values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
         Dao.cursor.execute(sql, param)
 
+    @staticmethod
     def insertPlayer(param):
         sql = 'insert into player values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
         Dao.cursor.execute(sql, param)
 
+    @staticmethod
     def insertMarket(param):
         sql = 'insert into market values(%s, %s, %s, %s, %s)'
         Dao.cursor.execute(sql, param)
 
+    @staticmethod
     def insertCareer(param):
         sql = 'insert into career values(%s, %s, %s, %s, %s, %s, %s, %s, %s)'
         Dao.cursor.execute(sql, param)
 
+    @staticmethod
     def insertNationalTeam(param):
         sql = 'insert into national_team values(%s, %s, %s, %s, %s, %s, %s)'
         Dao.cursor.execute(sql, param)
 
+    @staticmethod
     def updatePlayer(param):
         sql = 'update player set nationality = %s, position = %s, height = %s, modify_date = %s where id = %s'
         Dao.cursor.execute(sql, param)
 
+    @staticmethod
     def updateMarket(param):
         sql = 'update market set market_value = %s, modify_date = %s where id = %s and club = %s and record_date = %s'
         Dao.cursor.execute(sql, param)
 
+    @staticmethod
     def updateCareer(param):
         sql = 'update career set appearance = %s, goal = %s, assist = %s, yellow = %s, red = %s, minute = %s where id = %s and season = %s and club = %s'
         Dao.cursor.execute(sql, param)
 
+    @staticmethod
     def updateNationalTeam(param):
         sql = 'update national_team set appearance = %s, goal = %s, debut_date = %s, debut_age = %s, modify_date = %s where id = %s and nationality = %s'
         Dao.cursor.execute(sql, param)
 
+    @staticmethod
     def updateEternalTable(param):
         sql = 'update eternal_table set league = %s, level = %s, years = %s, first = %s, appearance = %s, win = %s, draw = %s, loss = %s, goal = %s, point = %s where id = %s'
         Dao.cursor.execute(sql, param)
 
+    @staticmethod
     def updateClubExtraData(param):
         sql = 'update club set founded = %s, ground = %s, capacity = %s where id = %s'
         Dao.cursor.execute(sql, param)
