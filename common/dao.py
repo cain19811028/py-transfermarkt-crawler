@@ -20,90 +20,102 @@ class Dao(object):
 
     @staticmethod
     def createEternalTable():
-        sql  = 'create table if not exists eternal_table ('
-        sql += 'id varchar(5) not null,'
-        sql += 'league varchar(4) not null,'
-        sql += 'level tinyint,'
-        sql += 'years smallint,'
-        sql += 'first smallint,'
-        sql += 'appearance smallint,'
-        sql += 'win smallint,'
-        sql += 'draw smallint,'
-        sql += 'loss smallint,'
-        sql += 'goal smallint,'
-        sql += 'point smallint,'
-        sql += 'primary key (id, league)'
-        sql += ')'
+        sql = """
+        create table if not exists eternal_table (
+            id varchar(5) not null,
+            league varchar(4) not null,
+            level tinyint,
+            years smallint,
+            first smallint,
+            appearance smallint,
+            win smallint,
+            draw smallint,
+            loss smallint,
+            goal smallint,
+            point smallint,
+            primary key (id, league)
+        )
+        """
         Dao.cursor.execute(sql)
 
     @staticmethod
     def createClubTable():
-        sql  = 'create table if not exists club ('
-        sql += 'id varchar(5) not null,'
-        sql += 'name varchar(40),'
-        sql += 'nation smallint,'
-        sql += 'founded varchar(4),'
-        sql += 'ground varchar(50),'
-        sql += 'capacity int,'
-        sql += 'primary key (id)'
-        sql += ')'
+        sql = """
+        create table if not exists club (
+            id varchar(5) not null,
+            name varchar(40),
+            nation smallint,
+            founded varchar(4),
+            ground varchar(50),
+            capacity int,
+            primary key (id)
+        )
+        """
         Dao.cursor.execute(sql)
 
     @staticmethod
     def createPlayerTable():
-        sql  = 'create table if not exists player ('
-        sql += 'id varchar(10) not null,'
-        sql += 'full_name varchar(40),'
-        sql += 'name varchar(20),'
-        sql += 'birthday varchar(8),'
-        sql += 'nationality int,'
-        sql += 'position tinyint,'
-        sql += 'height int,'
-        sql += 'retirement tinyint,'
-        sql += 'modify_date datetime,'
-        sql += 'primary key (id)'
-        sql += ')'
+        sql = """
+        create table if not exists player (
+            id varchar(10) not null,
+            full_name varchar(40),
+            name varchar(20),
+            birthday varchar(8),
+            nationality int,
+            position tinyint,
+            height int,
+            retirement tinyint,
+            modify_date datetime,
+            primary key (id)
+        ) 
+        """
         Dao.cursor.execute(sql)
 
     @staticmethod
     def createCareerTable():
-        sql  = 'create table if not exists career ('
-        sql += 'id varchar(10) not null,'
-        sql += 'season varchar(5),'
-        sql += 'club varchar(5),'
-        sql += 'appearance tinyint,'
-        sql += 'assist tinyint,'
-        sql += 'yellow tinyint,'
-        sql += 'red tinyint,'
-        sql += 'minute smallint,'
-        sql += 'primary key (id, season, club)'
-        sql += ')'
+        sql = """
+        create table if not exists career (
+            id varchar(10) not null,
+            season varchar(5),
+            club varchar(5),
+            appearance tinyint,
+            assist tinyint,
+            yellow tinyint,
+            red tinyint,
+            minute smallint,
+            primary key (id, season, club)
+        )
+        """
         Dao.cursor.execute(sql)
 
     @staticmethod
     def createNationTable():
-        sql  = 'create table if not exists national_team ('
-        sql += 'id varchar(10) not null,'
-        sql += 'nationality int,'
-        sql += 'appearance tinyint,'
-        sql += 'goal tinyint,'
-        sql += 'debut_date varchar(8),'
-        sql += 'debut_age varchar(30),'
-        sql += 'modify_date datetime,'
-        sql += 'primary key (id, nationality)'
-        sql += ')'
+        sql = """
+        create table if not exists national_team (
+            id varchar(10) not null,
+            nationality int,
+            appearance tinyint,
+            goal tinyint,
+            debut_date varchar(8),
+            debut_age varchar(30),
+            modify_date datetime,
+            primary key (id, nationality)
+        )
+        """
         Dao.cursor.execute(sql)
 
     @staticmethod
     def createMarketTable():
-        sql  = 'create table if not exists market ('
-        sql += 'id varchar(10) not null,'
-        sql += 'club varchar(5),'
-        sql += 'record_date varchar(8),'
-        sql += 'market_value bigint,'
-        sql += 'modify_date datetime,'
-        sql += 'primary key (id, club, record_date)'
-        sql += ')'
+        sql = """
+        create table if not exists market (
+            id varchar(10) not null,
+            club varchar(5),
+            record_date varchar(8),
+            market_value bigint,
+            modify_date datetime,
+            primary key (id, club, record_date)
+        )
+        """
         Dao.cursor.execute(sql)
 
     @staticmethod
