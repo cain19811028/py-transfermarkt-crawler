@@ -54,7 +54,7 @@ class Dao(object):
         Dao.cursor.execute(sql)
 
     @staticmethod
-    def createPlayerTable():
+    def create_player_table():
         sql = """
         create table if not exists player (
             id varchar(10) not null,
@@ -72,7 +72,7 @@ class Dao(object):
         Dao.cursor.execute(sql)
 
     @staticmethod
-    def createCareerTable():
+    def create_career_table():
         sql = """
         create table if not exists career (
             id varchar(10) not null,
@@ -89,7 +89,7 @@ class Dao(object):
         Dao.cursor.execute(sql)
 
     @staticmethod
-    def createNationTable():
+    def create_nation_table():
         sql = """
         create table if not exists national_team (
             id varchar(10) not null,
@@ -105,7 +105,7 @@ class Dao(object):
         Dao.cursor.execute(sql)
 
     @staticmethod
-    def createMarketTable():
+    def create_market_table():
         sql = """
         create table if not exists market (
             id varchar(10) not null,
@@ -119,13 +119,19 @@ class Dao(object):
         Dao.cursor.execute(sql)
 
     @staticmethod
-    def getAllClubId():
-        Dao.cursor.execute('select distinct id from club')
+    def get_all_club_id():
+        sql = """
+        select distinct id from club
+        """
+        Dao.cursor.execute(sql)
         return Dao.cursor.fetchall()
 
     @staticmethod
-    def getAllCountryId():
-        Dao.cursor.execute('select distinct id from country')
+    def get_all_country_id():
+        sql = """
+        select distinct id from country
+        """
+        Dao.cursor.execute(sql)
         return Dao.cursor.fetchall()
 
     @staticmethod

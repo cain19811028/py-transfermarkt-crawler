@@ -159,13 +159,13 @@ def parseNationalTeamData(playerId):
 
         print(nationality + ", " + appearance + ", " + goal + ", " + debut_date + ", " + debut_age)
 
-def buildClubSet():
-    result = Dao.getAllClubId()
+def build_club_set():
+    result = Dao.get_all_club_id()
     global CLUB_SET
     CLUB_SET = { item['id'] for item in result }
 
-def buildCountrySet():
-    result = Dao.getAllCountryId()
+def build_country_set():
+    result = Dao.get_all_country_id()
     global COUNTRY_SET
     COUNTRY_SET = { item['id'] for item in result }
 
@@ -200,17 +200,17 @@ def getNationalId(nationality):
 Main
 """
 Dao.init()
-Dao.createPlayerTable()
-Dao.createCareerTable()
-Dao.createNationTable()
-Dao.createMarketTable()
+Dao.create_player_table()
+Dao.create_career_table()
+Dao.create_nation_table()
+Dao.create_market_table()
 
-buildClubSet()
-buildCountrySet()
+build_club_set()
+build_country_set()
 
-playerSet = [80444]
+PLAYER_SET = [80444]
 
-for playerId in playerSet:
-    parsePlayerData(playerId)
-    parsePerformanceData(playerId)
-    parseNationalTeamData(playerId)
+# for player_id in PLAYER_SET:
+#     parsePlayerData(player_id)
+#     parsePerformanceData(player_id)
+#     parseNationalTeamData(player_id)
