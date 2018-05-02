@@ -72,7 +72,7 @@ def build_eternal_table(data):
         print(id + " : " + name + " : " + league + " : " + level + " : " + years + " : " + first + " : " + match + " : " + win + " : " + draw + " : " + loss + " : " + goal + " : " + point)
 
 def update_club_extra_data():
-    result = Dao.getNotCompleteClub()
+    result = Dao.get_incomplete_club()
     for club in result:
         foundation = ""
         stadium = ""
@@ -98,7 +98,7 @@ def update_club_extra_data():
                     foundation = td.split(',')[1].strip()
 
         param = (foundation, stadium, seat, club["id"])
-        Dao.updateClubExtraData(param)
+        Dao.update_club_extra_data(param)
         print(club["id"] + ", " + foundation + ", " + stadium + ", " + str(seat))
 
 """

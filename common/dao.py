@@ -149,8 +149,12 @@ class Dao(object):
         return Dao.cursor.rowcount
 
     @staticmethod
-    def getNotCompleteClub():
-        Dao.cursor.execute('select id from club where founded is null or ground is null or capacity is null')
+    def get_incomplete_club():
+        sql = """
+        select id from club 
+        where founded is null or ground is null or capacity is null
+        """
+        Dao.cursor.execute(sql)
         return Dao.cursor.fetchall()
 
     @staticmethod
@@ -166,6 +170,13 @@ class Dao(object):
         sql = """
         insert into eternal_table values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) 
         on duplicate key update id = %s, league = %s
+        """
+        Dao.cursor.execute(sql, param)
+
+    @staticmethod
+    def update_club_extra_data(param):
+        sql = """
+        update club set founded = %s, ground = %s, capacity = %s where id = %s
         """
         Dao.cursor.execute(sql, param)
 
@@ -207,9 +218,4 @@ class Dao(object):
     @staticmethod
     def updateNationalTeam(param):
         sql = 'update national_team set appearance = %s, goal = %s, debut_date = %s, debut_age = %s, modify_date = %s where id = %s and nationality = %s'
-        Dao.cursor.execute(sql, param)
-
-    @staticmethod
-    def updateClubExtraData(param):
-        sql = 'update club set founded = %s, ground = %s, capacity = %s where id = %s'
         Dao.cursor.execute(sql, param)
