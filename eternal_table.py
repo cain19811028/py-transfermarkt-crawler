@@ -36,7 +36,7 @@ LEAGUE["England"]     = {"id":"3299", "leagueName":"premier-league", "leagueSimp
 # LEAGUE["Japan"]       = {"id":"3435", "leagueName":"j1-league", "leagueSimplify":"JAP1", "startYear":"2004"}
 # LEAGUE["Korea"]       = {"id":"3589", "leagueName":"k-league-classic", "leagueSimplify":"RSK1", "startYear":"2009"}
 
-def getEternalTable(data):
+def build_eternal_table(data):
     url  = DOMAIN + data["leagueName"] + "/ewigeTabelle/wettbewerb/"
     url += data["leagueSimplify"] + "/saison_id_von/"
     url += data["startYear"] + "/saison_id_bis/" + str(LASTYEAR) + "/tabllenart/alle/plus/1"
@@ -62,24 +62,16 @@ def getEternalTable(data):
         point = td[13].text_content().replace(".", "")
 
         # build club data
-        count = Dao.getClubCount(id)
-        if(count == 0):
-            param = (id, name, data["id"])
-            Dao.insertClub(param)
-            print(id + " : " + name + " : " + data["id"])
+        param = (id, name, data["id"], id)
+        Dao.upsert_club(param)
+        print(id + " : " + name + " : " + data["id"])
 
         # build eternal table
-        count = Dao.getEternalTableCount(id, league)
-        if(count == 0):
-            param = (id, league, level, years, first, match, win, draw, loss, goal, point)
-            Dao.insertEternalTable(param)
-        else:
-            param = (league, level, years, first, match, win, draw, loss, goal, point, id)
-            Dao.updateEternalTable(param)
-
+        param = (id, league, level, years, first, match, win, draw, loss, goal, point, id, league)
+        Dao.upsert_eternal_table(param)
         print(id + " : " + name + " : " + league + " : " + level + " : " + years + " : " + first + " : " + match + " : " + win + " : " + draw + " : " + loss + " : " + goal + " : " + point)
 
-def updateClubExtraData():
+def update_club_extra_data():
     result = Dao.getNotCompleteClub()
     for club in result:
         foundation = ""
@@ -113,10 +105,10 @@ def updateClubExtraData():
 Main
 """
 Dao.init()
-Dao.createEternalTable()
-Dao.createClubTable()
+Dao.create_eternal_table()
+Dao.create_club_table()
 
 for country in LEAGUE:
-    getEternalTable(LEAGUE[country])
+    build_eternal_table(LEAGUE[country])
 
-updateClubExtraData()
+update_club_extra_data()

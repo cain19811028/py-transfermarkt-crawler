@@ -19,7 +19,7 @@ class Dao(object):
         Dao.cursor = conn.cursor()
 
     @staticmethod
-    def createEternalTable():
+    def create_eternal_table():
         sql = """
         create table if not exists eternal_table (
             id varchar(5) not null,
@@ -39,7 +39,7 @@ class Dao(object):
         Dao.cursor.execute(sql)
 
     @staticmethod
-    def createClubTable():
+    def create_club_table():
         sql = """
         create table if not exists club (
             id varchar(5) not null,
@@ -119,11 +119,6 @@ class Dao(object):
         Dao.cursor.execute(sql)
 
     @staticmethod
-    def getClubCount(id):
-        Dao.cursor.execute('select id from club where id = %s', id)
-        return Dao.cursor.rowcount
-
-    @staticmethod
     def getAllClubId():
         Dao.cursor.execute('select distinct id from club')
         return Dao.cursor.fetchall()
@@ -132,11 +127,6 @@ class Dao(object):
     def getAllCountryId():
         Dao.cursor.execute('select distinct id from country')
         return Dao.cursor.fetchall()
-
-    @staticmethod
-    def getEternalTableCount(id, league):
-        Dao.cursor.execute('select id from eternal_table where id = %s and league = %s', (id, league))
-        return Dao.cursor.rowcount
 
     @staticmethod
     def getPlayerCount(id):
@@ -164,13 +154,19 @@ class Dao(object):
         return Dao.cursor.fetchall()
 
     @staticmethod
-    def insertClub(param):
-        sql = 'insert into club (id, name, nation) values(%s, %s, %s)'
+    def upsert_club(param):
+        sql = """
+        insert into club (id, name, nation) values(%s, %s, %s) 
+        on duplicate key update id = %s
+        """
         Dao.cursor.execute(sql, param)
 
     @staticmethod
-    def insertEternalTable(param):
-        sql = 'insert into eternal_table values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
+    def upsert_eternal_table(param):
+        sql = """
+        insert into eternal_table values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) 
+        on duplicate key update id = %s, league = %s
+        """
         Dao.cursor.execute(sql, param)
 
     @staticmethod
@@ -211,11 +207,6 @@ class Dao(object):
     @staticmethod
     def updateNationalTeam(param):
         sql = 'update national_team set appearance = %s, goal = %s, debut_date = %s, debut_age = %s, modify_date = %s where id = %s and nationality = %s'
-        Dao.cursor.execute(sql, param)
-
-    @staticmethod
-    def updateEternalTable(param):
-        sql = 'update eternal_table set league = %s, level = %s, years = %s, first = %s, appearance = %s, win = %s, draw = %s, loss = %s, goal = %s, point = %s where id = %s'
         Dao.cursor.execute(sql, param)
 
     @staticmethod
