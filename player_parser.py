@@ -12,8 +12,8 @@ CLUB_SET = {}
 COUNTRY_SET = {}
 NOW_DATE = datetime.datetime.today().strftime('%Y%m%d')
 
-def parsePlayerData(playerId):
-    url  = DOMAIN + "player/profil/spieler/" + str(playerId)
+def parse_player_data(player_id):
+    url  = DOMAIN + "player/profil/spieler/" + str(player_id)
     print(url)
 
     response = requests.get(url, headers = HEADERS)
@@ -52,19 +52,14 @@ def parsePlayerData(playerId):
     height = int(height)
 
     # build player data
-    count = Dao.getPlayerCount(playerId)
-    if(count == 0):
-        param = (playerId, fullName, name, '', birthday, nationality, position, height, 0, 0, NOW_DATE)
-        Dao.insertPlayer(param)
-    else:
-        param = (nationality, position, height, NOW_DATE, playerId)
-        Dao.updatePlayer(param)
+    param = (player_id, fullName, name, birthday, nationality, position, height, 0, NOW_DATE, player_id)
+    Dao.upsert_player(param)
 
-    print(fullName + ", " + name + ", " + birthday + ", " + nationality + ", " + height + ", " + position)
+    print(fullName + ", " + name + ", " + birthday + ", " + nationality)
 
-    parseMarketData(playerId, response.text)
+    # parse_market_data(player_id, response.text)
 
-def parseMarketData(playerId, response):
+def parse_market_data(player_id, response):
 
     marketData = response.split("'Marktwert','data':")[1]
     marketData = marketData.split("}],'legend'")[0].replace("'", "\"")
@@ -83,14 +78,8 @@ def parseMarketData(playerId, response):
         tempTime = time.mktime(time.strptime(recrodDate, '%b %d %Y'))
         recrodDate = time.strftime("%Y%m%d", time.gmtime(tempTime))
 
-        count = Dao.getMarketCount(playerId, club, recrodDate)
-        if(count == 0):
-            param = (playerId, club, recrodDate, marketValue, NOW_DATE)
-            Dao.insertMarket(param)
-        else:
-            param = (marketValue, NOW_DATE, playerId, club, recrodDate)
-            Dao.updateMarket(param)
-
+        param = (player_id, club, recrodDate, marketValue, NOW_DATE, player_id)
+        Dao.upsert_market(param)
         print(club + ", " + marketValue + ", " + recrodDate)
 
 def parsePerformanceData(playerId):
@@ -208,9 +197,9 @@ Dao.create_market_table()
 build_club_set()
 build_country_set()
 
-PLAYER_SET = [80444]
+PLAYER_SET = [68290]
 
-# for player_id in PLAYER_SET:
-#     parsePlayerData(player_id)
+for player_id in PLAYER_SET:
+    parse_player_data(player_id)
 #     parsePerformanceData(player_id)
 #     parseNationalTeamData(player_id)

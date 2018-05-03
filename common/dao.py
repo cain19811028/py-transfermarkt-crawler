@@ -135,16 +135,6 @@ class Dao(object):
         return Dao.cursor.fetchall()
 
     @staticmethod
-    def getPlayerCount(id):
-        Dao.cursor.execute('select id from player where id = %s', (id))
-        return Dao.cursor.rowcount
-
-    @staticmethod
-    def getMarketCount(id, club, record_date):
-        Dao.cursor.execute('select id from market where id = %s and club = %s and record_date = %s', (id, club, record_date))
-        return Dao.cursor.rowcount
-
-    @staticmethod
     def getCareerCount(id, season, club):
         Dao.cursor.execute('select id from career where id = %s and season = %s and club = %s', (id, season, club))
         return Dao.cursor.rowcount
@@ -180,20 +170,26 @@ class Dao(object):
         Dao.cursor.execute(sql, param)
 
     @staticmethod
-    def update_club_extra_data(param):
+    def upsert_player(param):
         sql = """
-        update club set founded = %s, ground = %s, capacity = %s where id = %s
+        insert into player values(%s, %s, %s, %s, %s, %s, %s, %s, %s) 
+        on duplicate key update id = %s
         """
         Dao.cursor.execute(sql, param)
 
     @staticmethod
-    def insertPlayer(param):
-        sql = 'insert into player values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
+    def upsert_market(param):
+        sql = """
+        insert into market values(%s, %s, %s, %s, %s)
+        on duplicate key update id = %s
+        """
         Dao.cursor.execute(sql, param)
 
     @staticmethod
-    def insertMarket(param):
-        sql = 'insert into market values(%s, %s, %s, %s, %s)'
+    def update_club_extra_data(param):
+        sql = """
+        update club set founded = %s, ground = %s, capacity = %s where id = %s
+        """
         Dao.cursor.execute(sql, param)
 
     @staticmethod
@@ -204,16 +200,6 @@ class Dao(object):
     @staticmethod
     def insertNationalTeam(param):
         sql = 'insert into national_team values(%s, %s, %s, %s, %s, %s, %s)'
-        Dao.cursor.execute(sql, param)
-
-    @staticmethod
-    def updatePlayer(param):
-        sql = 'update player set nationality = %s, position = %s, height = %s, modify_date = %s where id = %s'
-        Dao.cursor.execute(sql, param)
-
-    @staticmethod
-    def updateMarket(param):
-        sql = 'update market set market_value = %s, modify_date = %s where id = %s and club = %s and record_date = %s'
         Dao.cursor.execute(sql, param)
 
     @staticmethod
