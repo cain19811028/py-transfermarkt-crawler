@@ -40,11 +40,11 @@ def parse_player_data(player_id):
     # nationality
     nationality = content.xpath('//a[@class="vereinprofil_tooltip"]')[0].attrib['id']
     if int(nationality) not in COUNTRY_SET:
-        nationality = getNationalId(nationality)
+        nationality = get_national_id(nationality)
 
     # position
     positionBlock = content.xpath('//div[@class="large-5 columns infos small-12"]/div[@class="auflistung"]/div')
-    position = getPositionId(positionBlock[0].text_content().split(':')[1].strip())
+    position = get_position_id(positionBlock[0].text_content().split(':')[1].strip())
 
     # height
     height = content.xpath('//span[@itemprop="height"]')[0].text_content().strip()
@@ -146,7 +146,7 @@ def build_country_set():
     global COUNTRY_SET
     COUNTRY_SET = { item['id'] for item in result }
 
-def getPositionId(position):
+def get_position_id(position):
     return {
         'Keeper' : '1',
         'Left-Back' : '2',
@@ -164,7 +164,7 @@ def getPositionId(position):
         'Centre-Forward': '14'
     }[position]
 
-def getNationalId(nationality):
+def get_national_id(nationality):
     return {
         '7658' : '3439',    # BRAZIL U20
         '9323' : '3377',    # FRANCE U21
