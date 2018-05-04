@@ -135,11 +135,6 @@ class Dao(object):
         return Dao.cursor.fetchall()
 
     @staticmethod
-    def getCareerCount(id, season, club):
-        Dao.cursor.execute('select id from career where id = %s and season = %s and club = %s', (id, season, club))
-        return Dao.cursor.rowcount
-
-    @staticmethod
     def getNationalCount(id):
         Dao.cursor.execute('select id from national_team where id = %s', (id))
         return Dao.cursor.rowcount
@@ -158,6 +153,13 @@ class Dao(object):
         sql = """
         insert into club (id, name, nation) values(%s, %s, %s) 
         on duplicate key update id = %s
+        """
+        Dao.cursor.execute(sql, param)
+
+    @staticmethod
+    def update_club_extra_data(param):
+        sql = """
+        update club set founded = %s, ground = %s, capacity = %s where id = %s
         """
         Dao.cursor.execute(sql, param)
 
@@ -186,25 +188,16 @@ class Dao(object):
         Dao.cursor.execute(sql, param)
 
     @staticmethod
-    def update_club_extra_data(param):
+    def upsert_career(param):
         sql = """
-        update club set founded = %s, ground = %s, capacity = %s where id = %s
+        insert into career values(%s, %s, %s, %s, %s, %s, %s, %s, %s)
+        on duplicate key update id = %s
         """
-        Dao.cursor.execute(sql, param)
-
-    @staticmethod
-    def insertCareer(param):
-        sql = 'insert into career values(%s, %s, %s, %s, %s, %s, %s, %s, %s)'
         Dao.cursor.execute(sql, param)
 
     @staticmethod
     def insertNationalTeam(param):
         sql = 'insert into national_team values(%s, %s, %s, %s, %s, %s, %s)'
-        Dao.cursor.execute(sql, param)
-
-    @staticmethod
-    def updateCareer(param):
-        sql = 'update career set appearance = %s, goal = %s, assist = %s, yellow = %s, red = %s, minute = %s where id = %s and season = %s and club = %s'
         Dao.cursor.execute(sql, param)
 
     @staticmethod

@@ -82,8 +82,8 @@ def parse_market_data(player_id, response):
         Dao.upsert_market(param)
         print(club + ", " + marketValue + ", " + recrodDate)
 
-def parsePerformanceData(playerId):
-    url  = DOMAIN + "player/detaillierteleistungsdaten/spieler/" + str(playerId) + "/plus/1"
+def parse_performance_data(player_id):
+    url  = DOMAIN + "player/detaillierteleistungsdaten/spieler/" + str(player_id) + "/plus/1"
     print(url)
 
     response = requests.get(url, headers = HEADERS)
@@ -107,17 +107,10 @@ def parsePerformanceData(playerId):
             red = td[11].text_content().replace("-", "0")
             minute = re.sub("\D", "", td[14].text_content().replace("-", "0"))
 
-
         if club in CLUB_SET:
-            count = Dao.getCareerCount(playerId, season, club)
-            if(count == 0):
-                param = (playerId, season, club, appearance, goal, assist, yellow, red, minute)
-                Dao.insertCareer(param)
-            else:
-                param = (appearance, goal, assist, yellow, red, minute, playerId, season, club)
-                Dao.updateCareer(param)
-
-        print(season + ", " + club + ", " + appearance + ", " + goal + ", " + assist + ", " + yellow + ", " + red + ", " + minute)
+            param = (player_id, season, club, appearance, goal, assist, yellow, red, minute, player_id)
+            Dao.upsert_career(param)
+            print(season + ", " + club + ", " + appearance + ", " + goal + ", " + assist + ", " + yellow + ", " + red + ", " + minute)
 
 def parseNationalTeamData(playerId):
     url  = DOMAIN + "player/nationalmannschaft/spieler/" + str(playerId)
@@ -201,5 +194,5 @@ PLAYER_SET = [68290]
 
 for player_id in PLAYER_SET:
     parse_player_data(player_id)
-#     parsePerformanceData(player_id)
+    parse_performance_data(player_id)
 #     parseNationalTeamData(player_id)
