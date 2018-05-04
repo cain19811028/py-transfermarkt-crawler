@@ -135,11 +135,6 @@ class Dao(object):
         return Dao.cursor.fetchall()
 
     @staticmethod
-    def getNationalCount(id):
-        Dao.cursor.execute('select id from national_team where id = %s', (id))
-        return Dao.cursor.rowcount
-
-    @staticmethod
     def get_incomplete_club():
         sql = """
         select id from club 
@@ -196,11 +191,9 @@ class Dao(object):
         Dao.cursor.execute(sql, param)
 
     @staticmethod
-    def insertNationalTeam(param):
-        sql = 'insert into national_team values(%s, %s, %s, %s, %s, %s, %s)'
-        Dao.cursor.execute(sql, param)
-
-    @staticmethod
-    def updateNationalTeam(param):
-        sql = 'update national_team set appearance = %s, goal = %s, debut_date = %s, debut_age = %s, modify_date = %s where id = %s and nationality = %s'
+    def upsert_national_team(param):
+        sql = """
+        insert into national_team values(%s, %s, %s, %s, %s, %s, %s)
+        on duplicate key update id = %s
+        """
         Dao.cursor.execute(sql, param)

@@ -112,8 +112,8 @@ def parse_performance_data(player_id):
             Dao.upsert_career(param)
             print(season + ", " + club + ", " + appearance + ", " + goal + ", " + assist + ", " + yellow + ", " + red + ", " + minute)
 
-def parseNationalTeamData(playerId):
-    url  = DOMAIN + "player/nationalmannschaft/spieler/" + str(playerId)
+def parse_national_team_data(player_id):
+    url  = DOMAIN + "player/nationalmannschaft/spieler/" + str(player_id)
     print(url)
 
     response = requests.get(url, headers = HEADERS)
@@ -131,14 +131,9 @@ def parseNationalTeamData(playerId):
         tempTime = time.mktime(time.strptime(debut_date, '%b %d %Y'))
         debut_date = time.strftime("%Y%m%d", time.gmtime(tempTime))
         debut_age = td[7].text_content().strip()
-        count = Dao.getNationalCount(playerId)
-        if(count == 0):
-            param = (playerId, nationality, appearance, goal, debut_date, debut_age, NOW_DATE)
-            Dao.insertNationalTeam(param)
-        else:
-            param = (appearance, goal, debut_date, debut_age, NOW_DATE, playerId, nationality)
-            Dao.updateNationalTeam(param)
 
+        param = (player_id, nationality, appearance, goal, debut_date, debut_age, NOW_DATE, player_id)
+        Dao.upsert_national_team(param)
         print(nationality + ", " + appearance + ", " + goal + ", " + debut_date + ", " + debut_age)
 
 def build_club_set():
@@ -195,4 +190,4 @@ PLAYER_SET = [68290]
 for player_id in PLAYER_SET:
     parse_player_data(player_id)
     parse_performance_data(player_id)
-#     parseNationalTeamData(player_id)
+    parse_national_team_data(player_id)
