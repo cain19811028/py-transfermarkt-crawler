@@ -3,7 +3,7 @@ import json
 import re
 import requests
 import time
-from common.dao import Dao
+from dao import Dao
 from lxml import html
 
 DOMAIN = "https://www.transfermarkt.co.uk/"

@@ -3,7 +3,7 @@ import json
 import pymysql
 import re
 import requests
-from common.dao import Dao
+from dao import Dao
 from lxml import html
 
 DOMAIN = "https://www.transfermarkt.co.uk/"
@@ -69,7 +69,7 @@ def build_eternal_table(data):
         # build eternal table
         param = (id, league, level, years, first, match, win, draw, loss, goal, point, id, league)
         Dao.upsert_eternal_table(param)
-        print(id + " : " + name + " : " + league + " : " + level + " : " + years + " : " + first + " : " + match + " : " + win + " : " + draw + " : " + loss + " : " + goal + " : " + point)
+        print(id + " : " + name)
 
 def update_club_extra_data():
     result = Dao.get_incomplete_club()
