@@ -79,6 +79,7 @@ class Dao(object):
             season varchar(5),
             club varchar(5),
             appearance tinyint,
+            goal tinyint,
             assist tinyint,
             yellow tinyint,
             red tinyint,

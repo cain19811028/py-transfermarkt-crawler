@@ -62,7 +62,12 @@ def parse_player_data(player_id):
 def parse_market_data(player_id, response):
 
     marketData = response.split("'Marktwert','data':")[1]
-    marketData = marketData.split("}],'legend'")[0].replace("'", "\"")
+    marketData = marketData.split("}],'legend'")[0]
+    marketData = marketData.replace("'", '"')
+    test = u"%s" %(marketData)
+    print(type(test))
+    print(test.encode("utf-8"))
+    marketData = test.encode("utf-8").decode("utf-8")
     marketData = json.loads(marketData)
     tempClub = ''
     for data in marketData:
@@ -185,7 +190,7 @@ Dao.create_market_table()
 build_club_set()
 build_country_set()
 
-PLAYER_SET = [68290]
+PLAYER_SET = [88755]
 
 for player_id in PLAYER_SET:
     parse_player_data(player_id)
