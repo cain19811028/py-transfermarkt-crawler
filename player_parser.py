@@ -52,7 +52,11 @@ def parse_player_data(player_id):
     height = int(height)
 
     # build player data
-    param = (player_id, fullName, name, birthday, nationality, position, height, 0, NOW_DATE, player_id)
+    param = (
+        player_id, 
+        fullName, name, birthday, nationality, position, height, 0, NOW_DATE, 
+        fullName, name, birthday, nationality, position, height, NOW_DATE, 
+    )
     Dao.upsert_player(param)
 
     print(fullName + ", " + name + ", " + birthday + ", " + nationality)
@@ -83,7 +87,11 @@ def parse_market_data(player_id, response):
         tempTime = time.mktime(time.strptime(recrodDate, '%b %d %Y'))
         recrodDate = time.strftime("%Y%m%d", time.gmtime(tempTime))
 
-        param = (player_id, club, recrodDate, marketValue, NOW_DATE, player_id)
+        param = (
+            player_id, 
+            club, recrodDate, marketValue, NOW_DATE, 
+            club, recrodDate, marketValue, NOW_DATE, 
+        )
         Dao.upsert_market(param)
         print(club + ", " + marketValue + ", " + recrodDate)
 
@@ -113,7 +121,11 @@ def parse_performance_data(player_id):
             minute = re.sub("\D", "", td[14].text_content().replace("-", "0"))
 
         if club in CLUB_SET:
-            param = (player_id, season, club, appearance, goal, assist, yellow, red, minute, player_id)
+            param = (
+                player_id, 
+                season, club, appearance, goal, assist, yellow, red, minute, 
+                season, club, appearance, goal, assist, yellow, red, minute
+            )
             Dao.upsert_career(param)
             print(season + ", " + club + ", " + appearance + ", " + goal + ", " + assist + ", " + yellow + ", " + red + ", " + minute)
 
@@ -137,7 +149,11 @@ def parse_national_team_data(player_id):
         debut_date = time.strftime("%Y%m%d", time.gmtime(tempTime))
         debut_age = td[7].text_content().strip()
 
-        param = (player_id, nationality, appearance, goal, debut_date, debut_age, NOW_DATE, player_id)
+        param = (
+            player_id, 
+            nationality, appearance, goal, debut_date, debut_age, NOW_DATE, 
+            nationality, appearance, goal, debut_date, debut_age, NOW_DATE
+        )
         Dao.upsert_national_team(param)
         print(nationality + ", " + appearance + ", " + goal + ", " + debut_date + ", " + debut_age)
 

@@ -52,22 +52,26 @@ def build_eternal_table(data):
         league = data["leagueSimplify"]
         tempLeague = td[3].text_content().replace(".Liga", "")
         level = tempLeague if re.match(r"(\d+)", tempLeague) else "99"
-        years = td[4].text_content().replace(".", "")
-        first = td[5].text_content().replace(".", "")
-        match = td[6].text_content().replace(".", "")
-        win = td[7].text_content().replace(".", "")
-        draw = td[8].text_content().replace(".", "")
-        loss = td[9].text_content().replace(".", "")
-        goal = td[10].text_content().split(":")[0].replace(".", "")
-        point = td[13].text_content().replace(".", "")
+        years = td[4].text_content().replace(".", "").strip()
+        first = td[5].text_content().replace(".", "").strip()
+        match = td[6].text_content().replace(".", "").strip()
+        win = td[7].text_content().replace(".", "").strip()
+        draw = td[8].text_content().replace(".", "").strip()
+        loss = td[9].text_content().replace(".", "").strip()
+        goal = td[10].text_content().split(":")[0].replace(".", "").strip()
+        point = td[13].text_content().replace(".", "").strip()
 
         # build club data
-        param = (id, name, data["id"], id)
+        param = (id, name, data["id"], name, data["id"])
         Dao.upsert_club(param)
         print(id + " : " + name + " : " + data["id"])
 
         # build eternal table
-        param = (id, league, level, years, first, match, win, draw, loss, goal, point, id, league)
+        param = (
+            id, league, 
+            level, years, first, match, win, draw, loss, goal, point, 
+            level, years, first, match, win, draw, loss, goal, point
+        )
         Dao.upsert_eternal_table(param)
         print(id + " : " + name)
 

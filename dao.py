@@ -43,7 +43,7 @@ class Dao(object):
         sql = """
         create table if not exists club (
             id varchar(5) not null,
-            name varchar(40),
+            name varchar(50),
             nation smallint,
             founded varchar(4),
             ground varchar(50),
@@ -148,7 +148,7 @@ class Dao(object):
     def upsert_club(param):
         sql = """
         insert into club (id, name, nation) values(%s, %s, %s) 
-        on duplicate key update id = %s
+        on duplicate key update name = %s, nation = %s
         """
         Dao.cursor.execute(sql, param)
 
@@ -163,7 +163,7 @@ class Dao(object):
     def upsert_eternal_table(param):
         sql = """
         insert into eternal_table values(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) 
-        on duplicate key update id = %s, league = %s
+        on duplicate key update level = %s, years = %s, first = %s, appearance = %s, win = %s, draw = %s, loss = %s, goal = %s, point = %s
         """
         Dao.cursor.execute(sql, param)
 
@@ -171,7 +171,8 @@ class Dao(object):
     def upsert_player(param):
         sql = """
         insert into player values(%s, %s, %s, %s, %s, %s, %s, %s, %s) 
-        on duplicate key update id = %s
+        on duplicate key update full_name = %s, name = %s, birthday = %s, 
+        nationality = %s, position = %s, height = %s, modify_date = %s
         """
         Dao.cursor.execute(sql, param)
 
@@ -179,7 +180,8 @@ class Dao(object):
     def upsert_market(param):
         sql = """
         insert into market values(%s, %s, %s, %s, %s)
-        on duplicate key update id = %s
+        on duplicate key update club = %s, record_date = %s, 
+        market_value = %s, modify_date = %s
         """
         Dao.cursor.execute(sql, param)
 
@@ -187,7 +189,8 @@ class Dao(object):
     def upsert_career(param):
         sql = """
         insert into career values(%s, %s, %s, %s, %s, %s, %s, %s, %s)
-        on duplicate key update id = %s
+        on duplicate key update season = %s, club = %s, appearance = %s, 
+        goal = %s, assist = %s, yellow = %s, red = %s, minute = %s
         """
         Dao.cursor.execute(sql, param)
 
@@ -195,6 +198,7 @@ class Dao(object):
     def upsert_national_team(param):
         sql = """
         insert into national_team values(%s, %s, %s, %s, %s, %s, %s)
-        on duplicate key update id = %s
+        on duplicate key update nationality = %s, appearance = %s, 
+        goal = %s, debut_date = %s, debut_age = %s, modify_date = %s
         """
         Dao.cursor.execute(sql, param)
