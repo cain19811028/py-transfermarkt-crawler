@@ -8,9 +8,9 @@ from lxml import html
 
 DOMAIN = "https://www.transfermarkt.co.uk/"
 HEADERS = {'User-Agent': 'Mozilla/5.0'}
-CLUB_SET = {}
-COUNTRY_SET = {}
 NOW_DATE = datetime.datetime.today().strftime('%Y%m%d')
+club_set = {}
+country_set = {}
 
 def parse_player_data(player_id):
     url  = DOMAIN + "player/profil/spieler/" + str(player_id)
@@ -39,7 +39,7 @@ def parse_player_data(player_id):
 
     # nationality
     nationality = content.xpath('//a[@class="vereinprofil_tooltip"]')[0].attrib['id']
-    if int(nationality) not in COUNTRY_SET:
+    if int(nationality) not in country_set:
         nationality = get_national_id(nationality)
 
     # position
@@ -120,7 +120,7 @@ def parse_performance_data(player_id):
             red = td[11].text_content().replace("-", "0")
             minute = re.sub("\D", "", td[14].text_content().replace("-", "0"))
 
-        if club in CLUB_SET:
+        if club in club_set:
             param = (
                 player_id, 
                 season, club, appearance, goal, assist, yellow, red, minute, 
@@ -141,7 +141,7 @@ def parse_national_team_data(player_id):
 
     nationality = td[1].xpath('//a[@class="vereinprofil_tooltip"]')[0].attrib['id']
 
-    if nationality in COUNTRY_SET:
+    if nationality in country_set:
         appearance = td[4].text_content().replace("-", "0")
         goal = td[5].text_content().replace("-", "0")
         debut_date = td[3].text_content().strip().replace(',', '')
@@ -159,13 +159,13 @@ def parse_national_team_data(player_id):
 
 def build_club_set():
     result = Dao.get_all_club_id()
-    global CLUB_SET
-    CLUB_SET = { item['id'] for item in result }
+    global club_set
+    club_set = { item['id'] for item in result }
 
 def build_country_set():
     result = Dao.get_all_country_id()
-    global COUNTRY_SET
-    COUNTRY_SET = { item['id'] for item in result }
+    global country_set
+    country_set = { item['id'] for item in result }
 
 def get_position_id(position):
     return {
@@ -206,9 +206,9 @@ Dao.create_market_table()
 build_club_set()
 build_country_set()
 
-PLAYER_SET = [88755]
+player_list = [103427]
 
-for player_id in PLAYER_SET:
+for player_id in player_list:
     parse_player_data(player_id)
     parse_performance_data(player_id)
     parse_national_team_data(player_id)
