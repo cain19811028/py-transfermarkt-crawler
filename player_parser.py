@@ -187,12 +187,27 @@ def get_position_id(position):
 
 def get_national_id(nationality):
     return {
-        '7658' : '3439',    # BRAZIL U20
-        '9323' : '3377',    # FRANCE U21
-        '3817' : '3262',    # GERMANY U21
+        '7658'  : '3439',   # BRAZIL U20
+        '9323'  : '3377',   # FRANCE U21
+        '3817'  : '3262',   # GERMANY U21
         '12609' : '3375',   # SPAIN U19
-        '9567' : '3375'     # SPAIN U21
+        '9567'  : '3375',   # SPAIN U21
+        '16374' : '16374'   # PORTUGAL U21
     }[nationality]
+
+def get_all_player_by_team_id(team_id):
+    url  = DOMAIN + "jumplist/startseite/verein/" + str(team_id)
+    print(url)
+
+    response = requests.get(url, headers = HEADERS)
+    content = html.fromstring(response.text)
+
+    player_list = []
+    link = content.xpath('//table[@class="inline-table"]//tr[1]/td[2]/div[1]/span/a')
+    for i in link:
+        player_list.append(int(i.attrib['id']))
+
+    return player_list
 
 """
 Main
@@ -206,9 +221,15 @@ Dao.create_market_table()
 build_club_set()
 build_country_set()
 
-player_list = [103427]
+"""
+team_id :
+    281 = Manchester City,     985 = Manchester United
+"""
+player_list = get_all_player_by_team_id(985)
+print(player_list)
 
 for player_id in player_list:
     parse_player_data(player_id)
     parse_performance_data(player_id)
     parse_national_team_data(player_id)
+    time.sleep(1)
