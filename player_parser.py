@@ -192,7 +192,8 @@ def get_national_id(nationality):
         '3817'  : '3262',   # GERMANY U21
         '12609' : '3375',   # SPAIN U19
         '9567'  : '3375',   # SPAIN U21
-        '16374' : '16374'   # PORTUGAL U21
+        '16374' : '3300',   # PORTUGAL U21
+        '22907' : '3299'    # ENGLAND U20
     }[nationality]
 
 def get_all_player_by_team_id(team_id):
