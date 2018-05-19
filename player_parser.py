@@ -38,9 +38,13 @@ def parse_player_data(player_id):
     birthday = time.strftime("%Y%m%d", time.gmtime(tempTime))
 
     # nationality
-    nationality = content.xpath('//a[@class="vereinprofil_tooltip"]')[0].attrib['id']
-    if int(nationality) not in country_set:
-        nationality = get_national_id(nationality)
+    nationality = content.xpath('//span[@class="dataValue"]/a[@class="vereinprofil_tooltip"]')
+    if len(nationality) > 0:
+        nationality = nationality[0].attrib['id']
+        if int(nationality) not in country_set:
+            nationality = get_national_id(nationality)
+    else:
+        nationality = "0"
 
     # position
     positionBlock = content.xpath('//div[@class="large-5 columns infos small-12"]/div[@class="auflistung"]/div')
@@ -68,11 +72,7 @@ def parse_market_data(player_id, response):
     marketData = response.split("'Marktwert','data':")[1]
     marketData = marketData.split("}],'legend'")[0]
     marketData = marketData.replace("'", '"')
-    test = u"%s" %(marketData)
-    print(type(test))
-    print(test.encode("utf-8"))
-    marketData = test.encode("utf-8").decode("utf-8")
-    marketData = json.loads(marketData)
+
     tempClub = ''
     for data in marketData:
         club = data['marker']['symbol']
@@ -139,7 +139,9 @@ def parse_national_team_data(player_id):
     dataBlock = content.xpath('//div[@class="large-8 columns"]/div[@class="box"][1]/table/tbody/tr')
     td = dataBlock[1].xpath('td')
 
-    nationality = td[1].xpath('//a[@class="vereinprofil_tooltip"]')[0].attrib['id']
+    nationality = td[1].xpath('//span[@class="dataValue"]/a[@class="vereinprofil_tooltip"]')
+    if (len(nationality)) > 0:
+        nationality = nationality[0].attrib['id']
 
     if nationality in country_set:
         appearance = td[4].text_content().replace("-", "0")
@@ -225,12 +227,13 @@ build_country_set()
 """
 team_id :
     281 = Manchester City,     985 = Manchester United
+    148 = Tottenham Hotspur
 """
-player_list = get_all_player_by_team_id(985)
+player_list = get_all_player_by_team_id(148)
 print(player_list)
 
 for player_id in player_list:
     parse_player_data(player_id)
     parse_performance_data(player_id)
-    parse_national_team_data(player_id)
+    # parse_national_team_data(player_id)
     time.sleep(1)
